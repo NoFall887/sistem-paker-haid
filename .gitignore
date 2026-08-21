@@ -18,3 +18,8 @@ coverage/
 /design_layout.md
 /implementation_plan.md
 /tasks.md
+
+# Local examples and HTML references
+/CONTOH*.md
+/*.html
+!/index.html
