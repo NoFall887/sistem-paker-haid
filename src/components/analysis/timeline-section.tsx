@@ -9,7 +9,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 
-import { colors, consistencies } from "@/components/analysis/analysis-options";
+import { colors, consistencies, odors, origins } from "@/components/analysis/analysis-options";
 import { NumberedSection } from "@/components/analysis/analysis-section";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,8 @@ import {
 import type {
   BloodColor,
   BloodConsistency,
+  BloodOdor,
+  BloodOrigin,
   BloodSegmentInput,
   CaseInput,
   ValidationIssue,
@@ -96,12 +98,14 @@ export function TimelineSection({
       </Alert>
       <div className="overflow-hidden rounded-lg border bg-card">
         {!!input.segments.length && (
-          <div className="hidden grid-cols-[2rem_minmax(10rem,1.25fr)_minmax(10rem,1.25fr)_minmax(8rem,0.9fr)_minmax(6rem,0.7fr)_5rem] items-center gap-2 border-b bg-muted/60 px-2 py-1.5 text-xs font-medium text-muted-foreground lg:grid">
+          <div className="hidden grid-cols-[2rem_minmax(10rem,1.2fr)_minmax(10rem,1.2fr)_minmax(7rem,.8fr)_minmax(6rem,.65fr)_minmax(7rem,.8fr)_minmax(8rem,.85fr)_4rem] items-center gap-2 border-b bg-muted/60 px-2 py-1.5 text-xs font-medium text-muted-foreground xl:grid">
             <span>No.</span>
             <span>Mulai keluar</span>
             <span>Berhenti / mampet</span>
             <span>Warna</span>
             <span>Sifat</span>
+            <span>Aroma</span>
+            <span>Asal</span>
             <span className="text-right">Aksi</span>
           </div>
         )}
@@ -178,19 +182,19 @@ function BloodSegmentRow({
     <div
       aria-invalid={Boolean(issue)}
       className={cn(
-        "grid grid-cols-2 gap-2 p-2 lg:grid-cols-[2rem_minmax(10rem,1.25fr)_minmax(10rem,1.25fr)_minmax(8rem,0.9fr)_minmax(6rem,0.7fr)_5rem] lg:items-end",
+        "grid grid-cols-2 gap-2 p-2 xl:grid-cols-[2rem_minmax(10rem,1.2fr)_minmax(10rem,1.2fr)_minmax(7rem,.8fr)_minmax(6rem,.65fr)_minmax(7rem,.8fr)_minmax(8rem,.85fr)_4rem] xl:items-end",
         issue && "bg-destructive/5",
       )}
     >
-      <div className="flex min-h-9 items-center lg:col-start-1 lg:row-start-1 lg:p-1 lg:justify-center">
-        <span className="lg:text-xs text-sm font-semibold lg:hidden">
+      <div className="flex min-h-9 items-center xl:col-start-1 xl:row-start-1 xl:p-1 xl:justify-center">
+        <span className="xl:text-xs text-sm font-semibold xl:hidden">
           Segmen {index + 1}
         </span>
-        <span className="hidden text-sm font-medium lg:inline">
+        <span className="hidden text-sm font-medium xl:inline">
           {index + 1}
         </span>
       </div>
-      <div className="flex min-h-9 items-center justify-end gap-1 lg:col-start-6 lg:row-start-1">
+      <div className="flex min-h-9 items-center justify-end gap-1 xl:col-start-8 xl:row-start-1">
         {issue && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -223,8 +227,8 @@ function BloodSegmentRow({
           <TooltipContent>Hapus segmen {index + 1}</TooltipContent>
         </Tooltip>
       </div>
-      <div className="min-w-0 space-y-1 lg:col-start-2 lg:row-start-1 lg:space-y-0">
-        <Label className="text-xs lg:sr-only" htmlFor={`${segment.id}-start`}>
+      <div className="min-w-0 space-y-1 xl:col-start-2 xl:row-start-1 xl:space-y-0">
+        <Label className="text-xs xl:sr-only" htmlFor={`${segment.id}-start`}>
           Mulai keluar
         </Label>
         <Input
@@ -237,8 +241,8 @@ function BloodSegmentRow({
           }
         />
       </div>
-      <div className="min-w-0 space-y-1 lg:col-start-3 lg:row-start-1 lg:space-y-0">
-        <Label className="text-xs lg:sr-only" htmlFor={`${segment.id}-end`}>
+      <div className="min-w-0 space-y-1 xl:col-start-3 xl:row-start-1 xl:space-y-0">
+        <Label className="text-xs xl:sr-only" htmlFor={`${segment.id}-end`}>
           Berhenti / mampet
         </Label>
         <Input
@@ -249,8 +253,8 @@ function BloodSegmentRow({
           onChange={(event) => onUpdate(segment.id, "end", event.target.value)}
         />
       </div>
-      <div className="min-w-0 space-y-1 lg:col-start-4 lg:row-start-1 lg:space-y-0">
-        <Label className="text-xs lg:sr-only" htmlFor={`${segment.id}-color`}>
+      <div className="min-w-0 space-y-1 xl:col-start-4 xl:row-start-1 xl:space-y-0">
+        <Label className="text-xs xl:sr-only" htmlFor={`${segment.id}-color`}>
           Warna darah
         </Label>
         <Select
@@ -271,9 +275,9 @@ function BloodSegmentRow({
           </SelectContent>
         </Select>
       </div>
-      <div className="min-w-0 space-y-1 lg:col-start-5 lg:row-start-1 lg:space-y-0">
+      <div className="min-w-0 space-y-1 xl:col-start-5 xl:row-start-1 xl:space-y-0">
         <Label
-          className="text-xs lg:sr-only"
+          className="text-xs xl:sr-only"
           htmlFor={`${segment.id}-consistency`}
         >
           Sifat darah
@@ -294,6 +298,20 @@ function BloodSegmentRow({
               </SelectItem>
             ))}
           </SelectContent>
+        </Select>
+      </div>
+      <div className="min-w-0 space-y-1 xl:col-start-6 xl:row-start-1 xl:space-y-0">
+        <Label className="text-xs xl:sr-only" htmlFor={`${segment.id}-odor`}>Aroma</Label>
+        <Select value={segment.odor ?? "TIDAK_BERAROMA"} onValueChange={(value) => onUpdate(segment.id, "odor", value as BloodOdor)}>
+          <SelectTrigger id={`${segment.id}-odor`} className="w-full"><SelectValue /></SelectTrigger>
+          <SelectContent>{odors.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
+        </Select>
+      </div>
+      <div className="min-w-0 space-y-1 xl:col-start-7 xl:row-start-1 xl:space-y-0">
+        <Label className="text-xs xl:sr-only" htmlFor={`${segment.id}-origin`}>Asal darah</Label>
+        <Select value={segment.origin ?? "ALAMI"} onValueChange={(value) => onUpdate(segment.id, "origin", value as BloodOrigin)}>
+          <SelectTrigger id={`${segment.id}-origin`} className="w-full"><SelectValue /></SelectTrigger>
+          <SelectContent>{origins.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
         </Select>
       </div>
     </div>

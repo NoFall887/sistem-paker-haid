@@ -105,6 +105,7 @@ export function ResultsSection({
               {(
                 [
                   "HAID",
+                  "NIFAS",
                   "ISTIHADHAH",
                   "SUCI",
                   "FASAD",
@@ -172,6 +173,7 @@ export function ResultsSection({
                       </TableCell>
                       <TableCell className="min-w-48 text-sm">
                         {row.note}
+                        <p className="mt-1 text-xs text-muted-foreground">{row.certainty} · {row.ruleIds.join(", ")}</p>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -189,6 +191,13 @@ export function ResultsSection({
               </AlertDescription>
             </Alert>
           )}
+          {(result.assumptions.length > 0 || result.expertWarnings.length > 0) && (
+            <Alert className="border-amber-300 bg-amber-50 text-amber-950">
+              <TriangleAlert />
+              <AlertTitle>Asumsi dan verifikasi ahli</AlertTitle>
+              <AlertDescription>{[...result.assumptions, ...result.expertWarnings].join(" ")}</AlertDescription>
+            </Alert>
+          )}
           <section aria-labelledby="habit-heading">
             <h2 id="habit-heading" className="text-sm font-semibold">
               Pembaruan kebiasaan
@@ -197,6 +206,14 @@ export function ResultsSection({
               {result.habitUpdate}
             </p>
           </section>
+          {result.worshipEvents.length > 0 && (
+            <section aria-labelledby="events-heading">
+              <h2 id="events-heading" className="text-sm font-semibold">Peristiwa mandi dan qadha</h2>
+              <ul className="mt-2 space-y-1 rounded-lg border p-3 text-sm">
+                {result.worshipEvents.map((event, index) => <li key={`${event.at}-${index}`}>{formatJakartaDateTime(event.at)} — {event.description} ({event.certainty})</li>)}
+              </ul>
+            </section>
+          )}
           <section aria-labelledby="guidance-heading">
             <h2 id="guidance-heading" className="text-sm font-semibold">
               Panduan amaliah
@@ -286,6 +303,7 @@ function ResultRowCard({
         {row.durationHours.toFixed(1)} jam
       </p>
       <p className="mt-1 border-t pt-1 text-sm">{row.note}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{row.certainty} · {row.ruleIds.join(", ")}</p>
     </div>
   );
 }

@@ -23,3 +23,6 @@ coverage/
 /CONTOH*.md
 /*.html
 !/index.html
+
+# Local canonical knowledge source
+/Kodifikasi Master Kaidah Fiqih Haid Mazhab Syafi'i - Edisi Terkoreksi.docx

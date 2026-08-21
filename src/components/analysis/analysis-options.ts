@@ -1,6 +1,8 @@
 import type {
   BloodColor,
   BloodConsistency,
+  BloodOdor,
+  BloodOrigin,
   FiqhStatus,
   UserStatus,
 } from "@/lib/fiqh-engine";
@@ -43,9 +45,9 @@ export const profiles: {
 export const colors: { value: BloodColor; label: string }[] = [
   { value: "HITAM", label: "Hitam (Aswad)" },
   { value: "MERAH", label: "Merah (Ahmar)" },
-  { value: "COKELAT", label: "Cokelat / Pirang" },
+  { value: "PIRANG", label: "Pirang (Asyqar)" },
   { value: "KUNING", label: "Kuning (Ashfar)" },
-  { value: "KERUH", label: "Keruh (Kudrah)" },
+  { value: "KERUH", label: "Keruh / Cokelat (Kudrah)" },
 ];
 
 export const consistencies: {
@@ -56,9 +58,20 @@ export const consistencies: {
   { value: "CAIR", label: "Cair" },
 ];
 
+export const odors: { value: BloodOdor; label: string }[] = [
+  { value: "BERAROMA", label: "Beraroma kuat" },
+  { value: "TIDAK_BERAROMA", label: "Tidak beraroma kuat" },
+];
+
+export const origins: { value: BloodOrigin; label: string }[] = [
+  { value: "ALAMI", label: "Alami dari rahim" },
+  { value: "LUKA_PENYAKIT", label: "Luka / penyakit" },
+];
+
 export const statusStyles: Record<FiqhStatus, string> = {
   HAID: "bg-red-600 text-white",
   HAID_SAHB: "bg-rose-400 text-white",
+  NIFAS: "bg-fuchsia-700 text-white",
   ISTIHADHAH: "bg-orange-600 text-white",
   SUCI: "bg-emerald-700 text-white",
   FASAD: "bg-slate-600 text-white",

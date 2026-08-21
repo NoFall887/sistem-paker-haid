@@ -1,7 +1,7 @@
 import { TIMEZONE, type CaseInput } from "@/lib/fiqh-engine";
 
 const STORAGE_KEY = "panduan-fikih-haid:history";
-export const HISTORY_SCHEMA_VERSION = 1;
+export const HISTORY_SCHEMA_VERSION = 3;
 
 export interface PersistedHistory {
   schemaVersion: number;
@@ -27,20 +27,40 @@ export function saveHistory(caseInput: CaseInput) {
   localStorage.setItem(STORAGE_KEY, serializeHistory(caseInput));
 }
 
+export function migrateHistory(value: unknown): CaseInput | null {
+  if (!value || typeof value !== "object") return null;
+  const parsed = value as Partial<PersistedHistory>;
+  if (parsed.timezone !== TIMEZONE || !parsed.caseInput || !Array.isArray(parsed.caseInput.segments)) return null;
+  if (![1, 2, HISTORY_SCHEMA_VERSION].includes(parsed.schemaVersion ?? 0)) return null;
+  const source = parsed.caseInput;
+  return {
+    ...source,
+    birthDate: source.birthDate ?? "",
+    menstrualHabitHours: source.menstrualHabitHours ?? (source.menstrualHabitDays ?? 7) * 24,
+    purityHabitHours: source.purityHabitHours ?? (source.purityHabitDays ?? 15) * 24,
+    rememberedHabitStart: source.rememberedHabitStart ?? "",
+    possibleHabitWindowStart: source.possibleHabitWindowStart ?? "",
+    possibleHabitWindowEnd: source.possibleHabitWindowEnd ?? "",
+    isFirstBleedingCycle: source.isFirstBleedingCycle ?? true,
+    habitHistory: source.habitHistory ?? [],
+    hasPostpartumBleeding: source.hasPostpartumBleeding ?? Boolean(source.deliveryAt),
+    isPregnant: source.isPregnant ?? false,
+    deliveryAt: source.deliveryAt ?? "",
+    deliveryComplete: source.deliveryComplete ?? true,
+    location: source.location ?? { useDeviceLocation: false, prayerAdjustments: {} },
+    segments: source.segments.map((segment) => ({
+      ...segment,
+      odor: segment.odor ?? "TIDAK_BERAROMA",
+      origin: segment.origin ?? "ALAMI",
+    })),
+  };
+}
+
 export function loadHistory(): CaseInput | null {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return null;
   try {
-    const parsed = JSON.parse(raw) as PersistedHistory;
-    if (
-      parsed.schemaVersion !== HISTORY_SCHEMA_VERSION ||
-      parsed.timezone !== TIMEZONE ||
-      !parsed.caseInput ||
-      !Array.isArray(parsed.caseInput.segments)
-    ) {
-      return null;
-    }
-    return parsed.caseInput;
+    return migrateHistory(JSON.parse(raw));
   } catch {
     return null;
   }
@@ -57,9 +77,17 @@ export function historyAsText(caseInput: CaseInput) {
     "RIWAYAT DARAH — PANDUAN FIKIH HAID & ISTIHADHAH",
     `Zona waktu: ${TIMEZONE}`,
     `Status pengalaman: ${status}`,
-    `Adat haid: ${caseInput.menstrualHabitDays ?? "-"} hari`,
-    `Adat suci: ${caseInput.purityHabitDays ?? "-"} hari`,
-    `Jam mulai kebiasaan: ${caseInput.habitualStartTime || "-"}`,
+    `Tanggal lahir: ${caseInput.birthDate || "-"}`,
+    `Adat haid: ${caseInput.menstrualHabitHours ?? (caseInput.menstrualHabitDays ?? 0) * 24} jam`,
+    `Adat suci: ${caseInput.purityHabitHours ?? (caseInput.purityHabitDays ?? 0) * 24} jam`,
+    `Timestamp mulai yang diingat: ${caseInput.rememberedHabitStart || caseInput.habitualStartTime || "-"}`,
+    `Rentang kemungkinan: ${caseInput.possibleHabitWindowStart || "-"} — ${caseInput.possibleHabitWindowEnd || "-"}`,
+    `Darah setelah persalinan: ${caseInput.hasPostpartumBleeding ? "ya" : "tidak"}`,
+    ...(caseInput.hasPostpartumBleeding ? [
+      `Persalinan selesai: ${caseInput.deliveryAt || "-"}`,
+      `Adat nifas: ${caseInput.postpartumHabitHours ?? "-"} jam`,
+    ] : []),
+    `Lokasi: ${caseInput.location?.latitude ?? "-"}, ${caseInput.location?.longitude ?? "-"}`,
     "",
     "KRONOLOGI DARAH",
   ];
@@ -68,7 +96,7 @@ export function historyAsText(caseInput: CaseInput) {
   segments.forEach((segment, index) => {
     lines.push(
       `${index + 1}. ${segment.start || "(mulai belum diisi)"} — ${segment.end || "(berhenti belum diisi)"}`,
-      `   Warna: ${segment.color}; Sifat: ${segment.consistency}`,
+      `   Warna: ${segment.color}; Kekentalan: ${segment.consistency}; Aroma: ${segment.odor ?? "TIDAK_BERAROMA"}; Asal: ${segment.origin ?? "ALAMI"}`,
     );
   });
   return `${lines.join("\r\n")}\r\n`;

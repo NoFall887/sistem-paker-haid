@@ -63,7 +63,7 @@ export function Field({
   children,
 }: {
   label: string;
-  hint: string;
+  hint?: string;
   htmlFor: string;
   children: ReactNode;
 }) {
@@ -71,7 +71,7 @@ export function Field({
     <div className="space-y-1">
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
-      <p className="text-xs leading-snug text-muted-foreground">{hint}</p>
+      {hint && <p className="text-xs leading-snug text-muted-foreground">{hint}</p>}
     </div>
   );
 }

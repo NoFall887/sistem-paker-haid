@@ -12,6 +12,7 @@ import type {
   CaseInput,
   ValidationIssue,
 } from "@/lib/fiqh-engine";
+import { PRAYER_TIME_FEATURE_ENABLED } from "@/lib/prayer-times";
 
 export function ReviewSection({
   input,
@@ -59,6 +60,10 @@ export function ReviewSection({
               label="Jam kebiasaan"
               value={input.habitualStartTime || "Tidak digunakan"}
             />
+            <ReviewLine label="Tanggal lahir" value={input.birthDate || "Belum diisi"} />
+            <ReviewLine label="Darah setelah persalinan" value={input.hasPostpartumBleeding ? "Ya" : "Tidak"} />
+            {input.hasPostpartumBleeding && <ReviewLine label="Persalinan selesai" value={input.deliveryAt || "Belum diisi"} />}
+            {PRAYER_TIME_FEATURE_ENABLED && <ReviewLine label="Lokasi" value={input.location?.latitude !== undefined && input.location?.longitude !== undefined ? `${input.location.latitude}, ${input.location.longitude}` : "Manual/perangkat belum diisi"} />}
           </div>
         </div>
         <div className="rounded-lg border bg-secondary/15 p-3">
@@ -85,6 +90,8 @@ export function ReviewSection({
                 <p className="mt-0.5 text-xs text-muted-foreground">
                   {colors.find((item) => item.value === segment.color)?.label} ·{" "}
                   {segment.consistency === "KENTAL" ? "Kental" : "Cair"}
+                  {" · "}{segment.odor === "BERAROMA" ? "Beraroma" : "Tidak beraroma"}
+                  {" · "}{segment.origin === "LUKA_PENYAKIT" ? "Luka/penyakit" : "Alami"}
                 </p>
               </div>
             ))}
