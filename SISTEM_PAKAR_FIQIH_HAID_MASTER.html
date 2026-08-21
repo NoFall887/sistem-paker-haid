@@ -1,0 +1,2146 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Sistem Pakar Fiqih Haid & Istihadhah Pro (Definitive Master System)
+    </title>
+    <style>
+      :root {
+        --primary-burgundy: #660c0c;
+        --primary-hover: #4a0707;
+        --accent-gold: #c59b27;
+        --accent-gold-light: #fdfaf0;
+        --accent-gold-border: #e6d4a2;
+        --bg-body: #f4f3ed;
+        --card-bg: #ffffff;
+        --text-dark: #222222;
+        --border-color: #dbd4c5;
+
+        --color-haid: #c62828;
+        --color-suci: #2e7d32;
+        --color-istihadhah: #e65100;
+        --color-fasad: #616161;
+        --color-ragu: #6a1b9a;
+        --color-tahrim: #b71c1c;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          "Segoe UI",
+          -apple-system,
+          BlinkMacSystemFont,
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-body);
+        color: var(--text-dark);
+        padding: 20px 10px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .app-container {
+        width: 100%;
+        max-width: 930px;
+        background: var(--card-bg);
+        border-radius: 18px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.09);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+      }
+
+      .app-header {
+        background: linear-gradient(135deg, var(--primary-burgundy), #300404);
+        color: white;
+        padding: 24px 20px;
+        text-align: center;
+        border-bottom: 4px solid var(--accent-gold);
+      }
+
+      .app-header h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        letter-spacing: 0.5px;
+      }
+
+      .app-header p {
+        font-size: 0.82rem;
+        opacity: 0.9;
+        font-weight: 300;
+      }
+
+      .content-body {
+        padding: 22px;
+      }
+
+      .panel-box {
+        background: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 18px;
+      }
+
+      .panel-title {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--primary-burgundy);
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid var(--accent-gold-border);
+        padding-bottom: 7px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 12px;
+      }
+
+      label {
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 5px;
+      }
+
+      input,
+      select {
+        padding: 9px 12px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 0.84rem;
+        background-color: #fafafa;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: var(--primary-burgundy);
+        outline: none;
+        background-color: #fff;
+        box-shadow: 0 0 0 3px rgba(102, 12, 12, 0.1);
+      }
+
+      .timeline-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 0.8rem;
+      }
+
+      .timeline-table th {
+        background-color: #f3efe6;
+        color: var(--text-dark);
+        padding: 10px 8px;
+        text-align: left;
+        font-weight: 600;
+        border: 1px solid var(--border-color);
+      }
+
+      .timeline-table td {
+        padding: 7px 8px;
+        border: 1px solid var(--border-color);
+        vertical-align: middle;
+      }
+
+      .timeline-table input,
+      .timeline-table select {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+        width: 100%;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .btn {
+        padding: 9px 15px;
+        border: none;
+        border-radius: 7px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-secondary {
+        background: #efe9de;
+        color: var(--text-dark);
+        border: 1px solid #d8cebe;
+      }
+
+      .btn-secondary:hover {
+        background: #e2d7c5;
+      }
+
+      .btn-danger {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+        padding: 5px 9px;
+        cursor: pointer;
+      }
+
+      .btn-submit {
+        width: 100%;
+        padding: 15px;
+        background: var(--primary-burgundy);
+        color: white;
+        font-size: 0.98rem;
+        border-radius: 10px;
+        border: none;
+        margin-top: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(102, 12, 12, 0.25);
+        letter-spacing: 0.5px;
+      }
+
+      .btn-submit:hover {
+        background: var(--primary-hover);
+      }
+
+      .preset-bar {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+
+      .preset-chip {
+        padding: 6px 12px;
+        background: #eae4d7;
+        border-radius: 20px;
+        font-size: 0.73rem;
+        cursor: pointer;
+        font-weight: 600;
+        border: 1px solid #d4cabb;
+        transition: all 0.2s;
+      }
+
+      .preset-chip:hover {
+        background: var(--primary-burgundy);
+        color: white;
+        border-color: var(--primary-burgundy);
+      }
+
+      #hasilContainer {
+        display: none;
+        margin-top: 25px;
+        animation: fadeIn 0.4s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .result-card {
+        background: #fff;
+        border: 2px solid var(--accent-gold);
+        border-radius: 14px;
+        padding: 22px;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 12px;
+      }
+
+      .badge-haid {
+        background-color: var(--color-haid);
+      }
+      .badge-istihadhah {
+        background-color: var(--color-istihadhah);
+      }
+      .badge-mutahayyirah {
+        background-color: var(--color-ragu);
+      }
+
+      .timeline-visual-wrapper {
+        margin: 18px 0;
+        background: #f0eee8;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #dcd7cb;
+      }
+
+      .timeline-visual-bar {
+        display: flex;
+        height: 32px;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+      }
+
+      .bar-segment {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.68rem;
+        font-weight: bold;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .legend-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 10px;
+        font-size: 0.73rem;
+        justify-content: center;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .legend-color {
+        width: 13px;
+        height: 13px;
+        border-radius: 3px;
+      }
+
+      .out-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 0.8rem;
+      }
+
+      .out-table th {
+        background: #fbf5e8;
+        padding: 9px 8px;
+        border: 1px solid #e8d7ab;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .out-table td {
+        padding: 7px 8px;
+        border: 1px solid #eee;
+        vertical-align: middle;
+      }
+
+      .adat-update-box {
+        background: #f0f7f1;
+        border: 1.5px solid #a5d6a7;
+        border-radius: 10px;
+        padding: 14px;
+        margin-top: 16px;
+        font-size: 0.84rem;
+        line-height: 1.6;
+      }
+
+      .adat-update-box strong {
+        color: #1b5e20;
+        font-size: 0.9rem;
+      }
+
+      .tahrim-alert-box {
+        background: #fff3f3;
+        border-left: 4px solid var(--color-tahrim);
+        padding: 12px 14px;
+        border-radius: 0 8px 8px 0;
+        margin-top: 14px;
+        font-size: 0.82rem;
+        line-height: 1.6;
+      }
+
+      .tahrim-alert-box strong {
+        color: var(--color-tahrim);
+      }
+
+      .ibadah-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .ibadah-card {
+        background: #fdfdfd;
+        border: 1px solid #e5e0d8;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      .ibadah-card strong {
+        color: var(--primary-burgundy);
+        display: block;
+        margin-bottom: 5px;
+        font-size: 0.85rem;
+      }
+
+      .kitab-quote {
+        background: #fbf9f5;
+        border: 1px dashed #c0ae91;
+        border-radius: 8px;
+        padding: 14px;
+        margin-top: 14px;
+        font-size: 0.82rem;
+      }
+
+      .kitab-quote .arabic {
+        font-family: "Amiri", "Traditional Arabic", serif;
+        font-size: 1.15rem;
+        direction: rtl;
+        text-align: right;
+        line-height: 1.8;
+        color: #111;
+        margin-bottom: 6px;
+      }
+
+      .kitab-quote .trans {
+        font-style: italic;
+        color: #444;
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 700px) {
+        .grid-2,
+        .ibadah-grid {
+          grid-template-columns: 1fr;
+        }
+        .timeline-table {
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="app-header">
+        <h1>Sistem Pakar Fiqih Haid & Istihadhah Pro</h1>
+        <p>
+          Definitive Master System • Klasifikasi 7 Mustahadhah & Multi-Siklus
+          Mazhab Syafi'i
+        </p>
+      </div>
+
+      <div class="content-body">
+        <!-- Preset Bar -->
+        <div style="margin-bottom: 12px">
+          <label style="font-size: 0.75rem; color: #666"
+            >Pilih Kasus Uji Standar:</label
+          >
+          <div class="preset-bar">
+            <span
+              class="preset-chip"
+              style="background: #660c0c; color: #fff"
+              onclick="loadPreset('kasus_5kd_berantai')"
+              >★ Uji Kasus: 5-KD Berantai (2026)</span
+            >
+            <span
+              class="preset-chip"
+              onclick="loadPreset('mubtadaah_mumayyizah')"
+              >Mubtada'ah Mumayyizah</span
+            >
+            <span class="preset-chip" onclick="loadPreset('mubtadaah_ghayr')"
+              >Mubtada'ah Ghayr Mumayyizah</span
+            >
+            <span class="preset-chip" onclick="loadPreset('mutadah_ghayr')"
+              >Mu'tadah Ghayr Mumayyizah</span
+            >
+            <span class="preset-chip" onclick="loadPreset('haid_taqatthu_jam')"
+              >Taqaṭṭu' Jam Pecahan (15j+15j)</span
+            >
+            <span
+              class="preset-chip"
+              onclick="loadPreset('takmil_sisa_pecahan')"
+              >Takmil + Sisa Pecahan Pasca-Takmil</span
+            >
+            <span class="preset-chip" onclick="loadPreset('dzakirah_waqt')"
+              >Dzakirah lil Waqt (Ingat Tanggal)</span
+            >
+            <span class="preset-chip" onclick="loadPreset('dzakirah_qadr')"
+              >Dzakirah lil Qadr (Ingat Jumlah Hari)</span
+            >
+            <span class="preset-chip" onclick="loadPreset('mutahayyirah')"
+              >Mutahayyirah Muthlaqah</span
+            >
+            <span class="preset-chip" onclick="loadPreset('tamyiz_tidak_sah')"
+              >Uji Tamyiz TIDAK Sah (Selang-seling)</span
+            >
+          </div>
+        </div>
+
+        <!-- Panel 1: Profil -->
+        <div class="panel-box">
+          <div class="panel-title">
+            1. Profil Status Wanita & Kebiasaan ('Ādah)
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Status Pengalaman Haid:</label>
+              <select id="userStatus" onchange="toggleAdatInputs()">
+                <option value="MUTADAH">
+                  Mu'tadah (Pernah Haid & Suci Sebelumnya)
+                </option>
+                <option value="MUBTADAH">
+                  Mubtada'ah (Baru Pertama Kali Baligh/Keluar Darah)
+                </option>
+                <option value="MUTAHAYYIRAH_MUTLAQAH">
+                  Mutahayyirah Muthlaqah (Lupa Total Hari & Tanggal Adat)
+                </option>
+                <option value="DZAKIRAH_QADR">
+                  Dzakirah lil Qadr Faqath (Ingat Jumlah Hari, Lupa Tanggal)
+                </option>
+                <option value="DZAKIRAH_WAQT">
+                  Dzakirah lil Waqt Faqath (Ingat Tanggal Mulai, Lupa Hari)
+                </option>
+              </select>
+            </div>
+            <div class="form-group" id="groupAdatHaid">
+              <label>Adat Durasi Haid (Hari):</label>
+              <input
+                type="number"
+                id="adatHaidHari"
+                value="7"
+                min="1"
+                max="15"
+              />
+            </div>
+          </div>
+          <div class="grid-2" id="rowAdatSuci">
+            <div class="form-group">
+              <label>Adat Durasi Suci (Hari):</label>
+              <input type="number" id="adatSuciHari" value="15" min="15" />
+            </div>
+            <div class="form-group">
+              <label>Titik Jam Mulai Kebiasaan:</label>
+              <input type="time" id="adatJamMulai" value="03:00" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Log Kronologis Darah -->
+        <div class="panel-box">
+          <div class="panel-title">
+            <span>2. Log Kronologis Darah & Sifat Fisiknya</span>
+            <span style="font-size: 0.72rem; font-weight: normal; color: #666"
+              >(Bisa input segmen tanpa batas)</span
+            >
+          </div>
+
+          <table class="timeline-table">
+            <thead>
+              <tr>
+                <th style="width: 28%">Waktu Mulai Keluar</th>
+                <th style="width: 28%">Waktu Mampet</th>
+                <th style="width: 22%">Warna Darah</th>
+                <th style="width: 14%">Sifat</th>
+                <th style="width: 8%; text-align: center">Hapus</th>
+              </tr>
+            </thead>
+            <tbody id="bloodLogTableBody"></tbody>
+          </table>
+
+          <div class="btn-row">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="addRowSegmen()"
+            >
+              + Tambah Baris Darah
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn-submit"
+          onclick="prosesAnalisisFikihMasterDefinitif()"
+        >
+          EKSEKUSI ANALISIS FIKIH MASTER DEFINITIF
+        </button>
+
+        <!-- Container Hasil Output -->
+        <div id="hasilContainer">
+          <div class="result-card">
+            <div id="badgeKategori" class="status-badge badge-haid">
+              MEMPROSES...
+            </div>
+            <h3
+              id="judulKeputusan"
+              style="
+                font-size: 1.15rem;
+                color: var(--primary-burgundy);
+                margin-bottom: 8px;
+              "
+            >
+              HASIL KEPUTUSAN FIKIH DEFINITIF
+            </h3>
+            <div
+              id="ringkasanEksekutif"
+              style="font-size: 0.86rem; line-height: 1.6; margin-bottom: 14px"
+            ></div>
+
+            <div class="timeline-visual-wrapper">
+              <div
+                style="
+                  font-size: 0.73rem;
+                  font-weight: bold;
+                  margin-bottom: 6px;
+                  color: #444;
+                "
+              >
+                PETA GARIS WAKTU HUKUM FIKIH:
+              </div>
+              <div class="timeline-visual-bar" id="timelineBarVisual"></div>
+              <div class="legend-bar">
+                <div class="legend-item">
+                  <div
+                    class="legend-color"
+                    style="background: var(--color-haid)"
+                  ></div>
+                  Haid Sah
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-color"
+                    style="background: var(--color-istihadhah)"
+                  ></div>
+                  Istihadhah (Takmil/Adat)
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-color"
+                    style="background: var(--color-suci)"
+                  ></div>
+                  Suci Murni
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-color"
+                    style="background: var(--color-fasad)"
+                  ></div>
+                  Darah Fasad
+                </div>
+                <div class="legend-item">
+                  <div
+                    class="legend-color"
+                    style="background: var(--color-ragu)"
+                  ></div>
+                  Ragu/Ihtiyath
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 14px">
+              <h4
+                style="
+                  font-size: 0.86rem;
+                  color: var(--primary-burgundy);
+                  margin-bottom: 6px;
+                "
+              >
+                Tabel Rincian Segmen & Hukum Fikih
+              </h4>
+              <table class="out-table">
+                <thead>
+                  <tr>
+                    <th style="width: 5%">No</th>
+                    <th style="width: 35%">Segmen Waktu</th>
+                    <th style="width: 20%">Durasi</th>
+                    <th style="width: 20%">Status Fikih</th>
+                    <th style="width: 20%">Catatan Kalender</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelHasilSegmenBody"></tbody>
+              </table>
+            </div>
+
+            <div id="boxHariRayaAlert" style="display: none"></div>
+            <div class="adat-update-box" id="boxAdatBaru"></div>
+
+            <div style="margin-top: 16px">
+              <h4
+                style="
+                  font-size: 0.86rem;
+                  color: var(--primary-burgundy);
+                  margin-bottom: 8px;
+                "
+              >
+                Panduan Amaliah Ibadah Fardhu
+              </h4>
+              <div class="ibadah-grid">
+                <div class="ibadah-card">
+                  <strong>1. Mandi Wajib (Ghusl)</strong>
+                  <span id="guideMandi">-</span>
+                </div>
+                <div class="ibadah-card">
+                  <strong>2. Shalat 5 Waktu</strong>
+                  <span id="guideShalat">-</span>
+                </div>
+                <div class="ibadah-card">
+                  <strong>3. Puasa Ramadhan & Qadha</strong>
+                  <span id="guidePuasa">-</span>
+                </div>
+                <div class="ibadah-card">
+                  <strong>4. Hubungan Suami-Istri</strong>
+                  <span id="guideJima">-</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px">
+              <h4
+                style="
+                  font-size: 0.86rem;
+                  color: var(--primary-burgundy);
+                  margin-bottom: 6px;
+                "
+              >
+                Nash Kitab Fikih Mazhab Syafi'i
+              </h4>
+              <div class="kitab-quote" id="boxIbaratKitab"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const H15_JAM = 360; // 15 hari = 360 jam (Aktsar al-Haydh & Aqall ath-Thuhr)
+      const H1_JAM = 24; // 1 hari 1 malam = 24 jam (Aqall al-Haydh)
+
+      const WARNA_SKOR = {
+        HITAM: 50,
+        MERAH: 40,
+        COKELAT: 30,
+        KUNING: 20,
+        KERUH: 10,
+      };
+      const SIFAT_SKOR = { KENTAL: 5, CAIR: 0 };
+
+      function diffJam(t2, t1) {
+        return (new Date(t2).getTime() - new Date(t1).getTime()) / 3600000;
+      }
+
+      function fTgl(dt) {
+        const d = new Date(dt);
+        return (
+          d.toLocaleDateString("id-ID", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          }) +
+          " " +
+          d.getHours().toString().padStart(2, "0") +
+          ":" +
+          d.getMinutes().toString().padStart(2, "0")
+        );
+      }
+
+      function toggleAdatInputs() {
+        const st = document.getElementById("userStatus").value;
+        const gHaid = document.getElementById("groupAdatHaid");
+        const rSuci = document.getElementById("rowAdatSuci");
+        if (st === "MUBTADAH" || st === "MUTAHAYYIRAH_MUTLAQAH") {
+          gHaid.style.display = "none";
+          rSuci.style.display = "none";
+        } else if (st === "DZAKIRAH_QADR") {
+          gHaid.style.display = "flex";
+          rSuci.style.display = "none";
+        } else if (st === "DZAKIRAH_WAQT") {
+          gHaid.style.display = "none";
+          rSuci.style.display = "grid";
+        } else {
+          gHaid.style.display = "flex";
+          rSuci.style.display = "grid";
+        }
+      }
+
+      function cekHariHaramPuasa(dateObj) {
+        try {
+          const hijriFormatter = new Intl.DateTimeFormat(
+            "id-u-ca-islamic-umalqura",
+            { day: "numeric", month: "numeric", year: "numeric" },
+          );
+          const parts = hijriFormatter.formatToParts(dateObj);
+          let hHari = 0,
+            hBulan = 0;
+          parts.forEach((p) => {
+            if (p.type === "day") hHari = parseInt(p.value, 10);
+            if (p.type === "month") hBulan = parseInt(p.value, 10);
+          });
+          if (hBulan === 10 && hHari === 1)
+            return { isHaram: true, nama: "Hari Raya Idul Fitri (1 Syawal)" };
+          if (hBulan === 12 && hHari === 10)
+            return {
+              isHaram: true,
+              nama: "Hari Raya Idul Adha (10 Dzulhijjah)",
+            };
+          if (hBulan === 12 && (hHari === 11 || hHari === 12 || hHari === 13))
+            return {
+              isHaram: true,
+              nama: `Hari Tasyrik (${hHari} Dzulhijjah)`,
+            };
+        } catch (e) {}
+        return { isHaram: false, nama: "" };
+      }
+
+      let rowCounter = 0;
+      function addRowSegmen(
+        tk = "",
+        jk = "06:00",
+        tb = "",
+        jb = "06:00",
+        warna = "MERAH",
+        sifat = "CAIR",
+      ) {
+        const tbody = document.getElementById("bloodLogTableBody");
+        const tr = document.createElement("tr");
+        const curId = `row_${rowCounter}`;
+        tr.id = curId;
+        tr.innerHTML = `
+            <td><div style="display:flex; gap:3px;"><input type="date" class="t-k" value="${tk}" required><input type="time" class="j-k" value="${jk}" required></div></td>
+            <td><div style="display:flex; gap:3px;"><input type="date" class="t-b" value="${tb}" required><input type="time" class="j-b" value="${jb}" required></div></td>
+            <td>
+                <select class="s-warna">
+                    <option value="HITAM" ${warna === "HITAM" ? "selected" : ""}>Hitam (Aswad)</option>
+                    <option value="MERAH" ${warna === "MERAH" ? "selected" : ""}>Merah (Ahmar)</option>
+                    <option value="COKELAT" ${warna === "COKELAT" ? "selected" : ""}>Cokelat/Pirang</option>
+                    <option value="KUNING" ${warna === "KUNING" ? "selected" : ""}>Kuning (Ashfar)</option>
+                    <option value="KERUH" ${warna === "KERUH" ? "selected" : ""}>Keruh (Kudrah)</option>
+                </select>
+            </td>
+            <td>
+                <select class="s-sifat">
+                    <option value="KENTAL" ${sifat === "KENTAL" ? "selected" : ""}>Kental</option>
+                    <option value="CAIR" ${sifat === "CAIR" ? "selected" : ""}>Cair</option>
+                </select>
+            </td>
+            <td style="text-align:center;"><button type="button" class="btn btn-danger" onclick="document.getElementById('${curId}').remove()">×</button></td>
+        `;
+        tbody.appendChild(tr);
+        rowCounter++;
+      }
+
+      function loadPreset(key) {
+        document.getElementById("bloodLogTableBody").innerHTML = "";
+        rowCounter = 0;
+
+        if (key === "kasus_5kd_berantai") {
+          document.getElementById("userStatus").value = "MUTADAH";
+          document.getElementById("adatHaidHari").value = 7;
+          document.getElementById("adatSuciHari").value = 15;
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-06-14",
+            "03:00",
+            "2026-06-21",
+            "15:00",
+            "MERAH",
+            "CAIR",
+          );
+          addRowSegmen(
+            "2026-07-03",
+            "13:00",
+            "2026-07-08",
+            "04:00",
+            "MERAH",
+            "CAIR",
+          );
+          addRowSegmen(
+            "2026-07-17",
+            "10:00",
+            "2026-07-28",
+            "11:00",
+            "MERAH",
+            "CAIR",
+          );
+          addRowSegmen(
+            "2026-08-01",
+            "13:00",
+            "2026-08-05",
+            "07:00",
+            "MERAH",
+            "CAIR",
+          );
+          addRowSegmen(
+            "2026-08-08",
+            "13:00",
+            "2026-08-09",
+            "19:00",
+            "MERAH",
+            "CAIR",
+          );
+        } else if (key === "mubtadaah_mumayyizah") {
+          document.getElementById("userStatus").value = "MUBTADAH";
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-06",
+            "06:00",
+            "HITAM",
+            "KENTAL",
+          );
+          addRowSegmen(
+            "2026-02-06",
+            "06:00",
+            "2026-02-24",
+            "06:00",
+            "MERAH",
+            "CAIR",
+          );
+        } else if (key === "mubtadaah_ghayr") {
+          document.getElementById("userStatus").value = "MUBTADAH";
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-22",
+            "06:00",
+            "MERAH",
+            "CAIR",
+          );
+        } else if (key === "mutadah_ghayr") {
+          document.getElementById("userStatus").value = "MUTADAH";
+          document.getElementById("adatHaidHari").value = 7;
+          document.getElementById("adatSuciHari").value = 23;
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-22",
+            "06:00",
+            "MERAH",
+            "CAIR",
+          );
+        } else if (key === "haid_taqatthu_jam") {
+          document.getElementById("userStatus").value = "MUTADAH";
+          document.getElementById("adatHaidHari").value = 7;
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-01",
+            "21:00",
+            "MERAH",
+            "KENTAL",
+          );
+          addRowSegmen(
+            "2026-02-03",
+            "21:00",
+            "2026-02-04",
+            "12:00",
+            "MERAH",
+            "KENTAL",
+          );
+        } else if (key === "takmil_sisa_pecahan") {
+          document.getElementById("userStatus").value = "MUTADAH";
+          document.getElementById("adatHaidHari").value = 7;
+          document.getElementById("adatSuciHari").value = 15;
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-08",
+            "06:00",
+            "MERAH",
+            "CAIR",
+          );
+          addRowSegmen(
+            "2026-02-21",
+            "06:00",
+            "2026-02-23",
+            "18:00",
+            "MERAH",
+            "CAIR",
+          );
+          addRowSegmen(
+            "2026-02-25",
+            "06:00",
+            "2026-02-26",
+            "06:00",
+            "MERAH",
+            "CAIR",
+          );
+        } else if (key === "dzakirah_waqt") {
+          document.getElementById("userStatus").value = "DZAKIRAH_WAQT";
+          document.getElementById("adatSuciHari").value = 15;
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-25",
+            "06:00",
+            "MERAH",
+            "CAIR",
+          );
+        } else if (key === "dzakirah_qadr") {
+          document.getElementById("userStatus").value = "DZAKIRAH_QADR";
+          document.getElementById("adatHaidHari").value = 7;
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-28",
+            "06:00",
+            "MERAH",
+            "CAIR",
+          );
+        } else if (key === "mutahayyirah") {
+          document.getElementById("userStatus").value = "MUTAHAYYIRAH_MUTLAQAH";
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-25",
+            "06:00",
+            "MERAH",
+            "CAIR",
+          );
+        } else if (key === "tamyiz_tidak_sah") {
+          // Pola darah SELANG-SELING (lemah-kuat-lemah-kuat): total jam kuat & lemah
+          // bisa memenuhi ambang angka, tapi POLA-nya tidak menandai satu periode
+          // haid yang menyambung -> harus DITOLAK sebagai tamyiz sah.
+          document.getElementById("userStatus").value = "MUBTADAH";
+          toggleAdatInputs();
+          addRowSegmen(
+            "2026-02-01",
+            "06:00",
+            "2026-02-09",
+            "06:00",
+            "KUNING",
+            "CAIR",
+          ); // lemah, 8 hari
+          addRowSegmen(
+            "2026-02-09",
+            "06:00",
+            "2026-02-12",
+            "06:00",
+            "HITAM",
+            "KENTAL",
+          ); // kuat, 3 hari
+          addRowSegmen(
+            "2026-02-12",
+            "06:00",
+            "2026-02-20",
+            "06:00",
+            "KUNING",
+            "CAIR",
+          ); // lemah, 8 hari
+          addRowSegmen(
+            "2026-02-20",
+            "06:00",
+            "2026-02-23",
+            "06:00",
+            "HITAM",
+            "KENTAL",
+          ); // kuat, 3 hari
+        }
+      }
+
+      function ambilDataInput() {
+        const rows = document.querySelectorAll("#bloodLogTableBody tr");
+        const segments = [];
+        const errors = [];
+
+        rows.forEach((tr, index) => {
+          const tk = tr.querySelector(".t-k").value;
+          const jk = tr.querySelector(".j-k").value;
+          const tb = tr.querySelector(".t-b").value;
+          const jb = tr.querySelector(".j-b").value;
+          const w = tr.querySelector(".s-warna").value;
+          const s = tr.querySelector(".s-sifat").value;
+
+          // Baris baru memiliki nilai jam/warna bawaan. Karena itu sebuah baris
+          // dianggap kosong jika kedua tanggalnya belum diisi.
+          if (!tk && !tb) return;
+          if (!tk || !jk || !tb || !jb) {
+            errors.push(`Baris ${index + 1}: tanggal dan jam harus diisi lengkap.`);
+            return;
+          }
+
+          const start = new Date(`${tk}T${jk}`);
+          const end = new Date(`${tb}T${jb}`);
+          if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+            errors.push(`Baris ${index + 1}: tanggal atau jam tidak valid.`);
+            return;
+          }
+          if (end <= start) {
+            errors.push(`Baris ${index + 1}: waktu akhir harus setelah waktu mulai.`);
+            return;
+          }
+
+          segments.push({
+            start,
+            end,
+            durasiJam: diffJam(end, start),
+            warna: w,
+            sifat: s,
+            kekuatan: WARNA_SKOR[w] + SIFAT_SKOR[s],
+            baris: [index + 1],
+          });
+        });
+
+        segments.sort((a, b) => a.start - b.start);
+
+        for (let i = 1; i < segments.length; i++) {
+          if (segments[i].start < segments[i - 1].end) {
+            errors.push(
+              `Baris ${segments[i].baris[0]}: rentang darah overlap dengan baris ${segments[i - 1].baris[0]}.`,
+            );
+          }
+        }
+
+        if (errors.length > 0) return { segments: [], episodes: [], errors };
+
+        // Pembagian satu rentang identik ke beberapa baris tidak boleh mengubah
+        // hasil. Gabungkan hanya segmen yang benar-benar bersebelahan dan mempunyai
+        // sifat fisik sama; perubahan sifat tetap dipertahankan untuk tamyiz.
+        const normalized = [];
+        segments.forEach((segment) => {
+          const last = normalized[normalized.length - 1];
+          if (
+            last &&
+            last.end.getTime() === segment.start.getTime() &&
+            last.warna === segment.warna &&
+            last.sifat === segment.sifat
+          ) {
+            last.end = segment.end;
+            last.durasiJam = diffJam(last.end, last.start);
+            last.baris.push(...segment.baris);
+          } else {
+            normalized.push({ ...segment });
+          }
+        });
+
+        const episodes = [];
+        normalized.forEach((segment) => {
+          let episode = episodes[episodes.length - 1];
+          if (
+            episode &&
+            episode.end.getTime() === segment.start.getTime()
+          ) {
+            episode.end = segment.end;
+            episode.durasiJam = diffJam(episode.end, episode.start);
+            episode.segments.push(segment);
+          } else {
+            episode = {
+              start: segment.start,
+              end: segment.end,
+              durasiJam: segment.durasiJam,
+              segments: [segment],
+            };
+            episodes.push(episode);
+          }
+        });
+
+        return { segments: normalized, episodes, errors: [] };
+      }
+
+      // ------------------------------------------------------------------
+      // Validasi POLA tamyiz sah menurut kaidah Syafi'i:
+      // Darah kuat harus berada di AWAL rentang (satu blok/menyambung),
+      // diikuti darah lemah hingga akhir rentang (juga satu blok/menyambung).
+      // Pola berselang-seling (kuat-lemah-kuat-lemah, dst) TIDAK sah dijadikan
+      // dasar tamyiz walau totalnya memenuhi syarat jam, karena tamyiz mensyaratkan
+      // satu transisi tunggal dari kuat -> lemah yang menandai akhirnya haid.
+      // ------------------------------------------------------------------
+      function validasiPolaTamyiz(rawKDs, episodes, maxScore) {
+        if (rawKDs.length === 0 || episodes.length !== 1)
+          return { sah: false };
+
+        // Segmen pertama wajib darah kuat
+        if (rawKDs[0].kekuatan !== maxScore) return { sah: false };
+
+        // Cari titik transisi pertama dari kuat -> bukan-kuat
+        let idxTransisi = -1;
+        for (let i = 0; i < rawKDs.length; i++) {
+          if (rawKDs[i].kekuatan !== maxScore) {
+            idxTransisi = i;
+            break;
+          }
+        }
+
+        // Semua segmen kuat (tidak ada darah lemah sama sekali) -> tidak ada tamyiz
+        if (idxTransisi === -1) return { sah: false };
+
+        // Setelah transisi ke lemah, TIDAK BOLEH ada darah kuat lagi (harus satu blok kuat, satu blok lemah)
+        for (let i = idxTransisi; i < rawKDs.length; i++) {
+          if (rawKDs[i].kekuatan === maxScore) {
+            return { sah: false }; // ditemukan darah kuat lagi setelah masuk fase lemah -> pola berselang-seling
+          }
+        }
+
+        const kuatStart = rawKDs[0].start;
+        const kuatEnd = rawKDs[idxTransisi - 1].end;
+        const lemahStart = rawKDs[idxTransisi].start;
+        const lemahEnd = rawKDs[rawKDs.length - 1].end;
+
+        return {
+          sah: true,
+          idxTransisi,
+          kuatStart,
+          kuatEnd,
+          lemahStart,
+          lemahEnd,
+          durasiKuatJam: diffJam(kuatEnd, kuatStart),
+          durasiLemahJam: diffJam(lemahEnd, lemahStart),
+        };
+      }
+
+      function ringkasSifatDarah(segments) {
+        return [
+          ...new Set(segments.map((s) => `${s.warna} / ${s.sifat}`)),
+        ].join(", ");
+      }
+
+      function prosesAnalisisFikihMasterDefinitif() {
+        document.getElementById("hasilContainer").style.display = "none";
+        const input = ambilDataInput();
+        if (input.errors.length > 0) {
+          alert(`Perbaiki input berikut:\n- ${input.errors.join("\n- ")}`);
+          return;
+        }
+
+        const rawKDs = input.segments;
+        const episodes = input.episodes;
+        if (rawKDs.length === 0) {
+          alert("Masukkan minimal satu baris data darah yang valid!");
+          return;
+        }
+
+        const userStatus = document.getElementById("userStatus").value;
+        const adatHaidHari =
+          parseFloat(document.getElementById("adatHaidHari").value) || 7;
+        const adatSuciHari =
+          parseFloat(document.getElementById("adatSuciHari").value) || 15;
+
+        const globalStart = rawKDs[0].start;
+        const globalEnd = rawKDs[rawKDs.length - 1].end;
+        const totalRentangJam = diffJam(globalEnd, globalStart);
+
+        let hasil = {
+          kategoriBadge: "badge-haid",
+          namaKategori: "",
+          ringkasan: "",
+          visualSegments: [],
+          tableRows: [],
+          haidSahList: [],
+          mandiGuide: "",
+          shalatGuide: "",
+          puasaGuide: "",
+          jimaGuide: "",
+          ibaratKitab: {},
+        };
+
+        // 1. MUTAHAYYIRAH MUTHLAQAH (LUPA TOTAL)
+        if (userStatus === "MUTAHAYYIRAH_MUTLAQAH") {
+          hasil.kategoriBadge = "badge-mutahayyirah";
+          hasil.namaKategori = "MUTAHAYYIRAH MUTHLAQAH (ADH-DHĀLLAH)";
+          hasil.ringkasan = `Darah mengalir sepanjang <b>${(totalRentangJam / 24).toFixed(1)} hari</b> dan wanita lupa total jumlah hari serta tanggal mulainya kebiasaan. Berlaku hukum <b>Ihtiyāṭ (Kehati-hatian Mutlak)</b>.`;
+          hasil.visualSegments.push({
+            label: "Ragu/Ihtiyath",
+            jam: totalRentangJam,
+            color: "var(--color-ragu)",
+          });
+          hasil.tableRows.push({
+            label: "Masa Ragu (Ihtiyath)",
+            start: globalStart,
+            end: globalEnd,
+            durasiJam: totalRentangJam,
+            status: "IHTIYATH",
+            catatan: "Probabilitas Haid / Suci / Terputus",
+          });
+          hasil.mandiGuide =
+            "Wajib mandi besar setiap kali hendak shalat fardhu menurut pendapat al-ashahh dalam Mazhab Syafi'i.";
+          hasil.shalatGuide =
+            "Wajib shalat 5 waktu setelah bersuci dan menyumbat keluarnya darah. Shalat sah secara hukum zhahir.";
+          hasil.puasaGuide =
+            "Wajib puasa Ramadhan sebulan penuh. Wajib meng-qadha 16 hari puasa di bulan lain untuk memastikan tercapainya 15 hari puasa suci sah.";
+          hasil.jimaGuide =
+            "Haram berhubungan suami-istri secara mutlak selama darah masih terus mengalir.";
+          hasil.ibaratKitab = {
+            kitab: "Al-Majmu' Syarah al-Muhadzdzab – Imam an-Nawawi",
+            arab: "وَالْمُتَحَيِّرَةُ وَهِيَ النَّاسِيَةُ لِعَادَتِهَا قَدْرًا وَوَقْتًا تَلْزَمُهَا الصَّلَاةُ وَالصَّوْمُ احْتِيَاطًا وَتَغْتَسِلُ لِكُلِّ فَرِيضَةٍ فِي الْأَصَحِّ",
+            trans:
+              "Dan wanita mutahayyirah yaitu yang lupa kebiasaannya baik kadar maupun waktunya, wajib baginya shalat dan puasa atas jalan kehati-hatian, serta wajib mandi untuk setiap shalat fardhu menurut pendapat yang paling sahih.",
+          };
+          tampilkanHasil(hasil);
+          return;
+        }
+
+        // 2. DZAKIRAH LIL WAQT FAQATH (INGAT TANGGAL MULAI, LUPA HARI)
+        if (userStatus === "DZAKIRAH_WAQT") {
+          hasil.kategoriBadge = "badge-mutahayyirah";
+          hasil.namaKategori = "DZĀKIRAH LIL WAQT FAQATH";
+          hasil.ringkasan = `Wanita mengingat tanggal mulainya haid namun lupa jumlah harinya. Hari ke-1 (24 jam pertama) dihukumi <b>Yakin Haid</b>, hari ke-2 s.d. 15 dihukumi <b>Ihtiyāṭ (Ragu)</b>, dan setelah hari ke-15 dihukumi <b>Yakin Suci</b>.`;
+
+          const tDay1 = new Date(globalStart.getTime() + H1_JAM * 3600000);
+          const tDay15 = new Date(globalStart.getTime() + H15_JAM * 3600000);
+          const endIhtiyath = globalEnd < tDay15 ? globalEnd : tDay15;
+
+          hasil.visualSegments.push({
+            label: "Yaqin Haid (24j)",
+            jam: H1_JAM,
+            color: "var(--color-haid)",
+          });
+          hasil.tableRows.push({
+            label: "Hari Ke-1 (Yakin Haid)",
+            start: globalStart,
+            end: tDay1,
+            durasiJam: H1_JAM,
+            status: "HAID",
+            catatan: "Kadar Minimal Haid Sah",
+          });
+          hasil.haidSahList.push({
+            label: "HAID 1 (24 Jam)",
+            start: globalStart,
+            end: tDay1,
+          });
+
+          if (endIhtiyath > tDay1) {
+            const durIht = diffJam(endIhtiyath, tDay1);
+            hasil.visualSegments.push({
+              label: "Ihtiyath (Hari 2-15)",
+              jam: durIht,
+              color: "var(--color-ragu)",
+            });
+            hasil.tableRows.push({
+              label: "Hari Ke-2 s/d 15 (Masa Ragu)",
+              start: tDay1,
+              end: endIhtiyath,
+              durasiJam: durIht,
+              status: "IHTIYATH",
+              catatan: "Wajib Mandi Tiap Shalat",
+            });
+          }
+
+          if (globalEnd > tDay15) {
+            const durSuci = diffJam(globalEnd, tDay15);
+            hasil.visualSegments.push({
+              label: "Yaqin Suci (>15h)",
+              jam: durSuci,
+              color: "var(--color-suci)",
+            });
+            hasil.tableRows.push({
+              label: "Setelah Hari Ke-15 (Yakin Suci)",
+              start: tDay15,
+              end: globalEnd,
+              durasiJam: durSuci,
+              status: "SUCI / ISTIHADHAH",
+              catatan: "Melebihi Batas Maksimal Haid",
+            });
+          }
+
+          hasil.mandiGuide =
+            "Wajib mandi setelah 24 jam pertama, lalu mandi setiap hendak shalat fardhu pada hari ke-2 s.d. hari ke-15.";
+          hasil.shalatGuide =
+            "Haram shalat pada 24 jam pertama. Wajib shalat pada hari ke-2 seterusnya setelah mandi.";
+          hasil.puasaGuide =
+            "Puasa sah setelah hari ke-15. Puasa hari ke-2 s.d. 15 wajib di-qadha atas jalan ihtiyath.";
+          hasil.jimaGuide = "Haram jima' pada hari ke-1 s.d. hari ke-15.";
+          hasil.ibaratKitab = {
+            kitab: "Al-Majmu' Syarah al-Muhadzdzab – Imam an-Nawawi",
+            arab: "وَإِنْ ذَكَرَتْ الْوَقْتَ دُونَ الْقَدْرِ فَبِدَايَتُهُ حَيْضٌ بِيَقِينٍ ثُمَّ تَتَرَبَّصُ إِلَى خَمْسَةَ عَشَرَ احْتِيَاطًا",
+            trans:
+              "Dan jika ia mengingat waktu mulainya tanpa mengingat kadarnya, maka permulaannya adalah haid secara yakin, kemudian ia bersikap ihtiyath hingga hari kelima belas.",
+          };
+          tampilkanHasil(hasil);
+          return;
+        }
+
+        // 3. DZAKIRAH LIL QADR FAQATH (INGAT JUMLAH HARI, LUPA TANGGAL MULAI)
+        if (userStatus === "DZAKIRAH_QADR") {
+          hasil.kategoriBadge = "badge-mutahayyirah";
+          hasil.namaKategori = "DZĀKIRAH LIL QADR FAQATH";
+          hasil.ringkasan = `Wanita mengingat kadar durasi haidnya (<b>${adatHaidHari} Hari</b>) namun lupa kapan mulainya. Sepanjang rentang pendarahan dihukumi <b>Ihtiyāṭ (Ragu)</b> karena setiap saat berpotensi haid atau suci.`;
+          hasil.visualSegments.push({
+            label: "Ihtiyath (Ragu)",
+            jam: totalRentangJam,
+            color: "var(--color-ragu)",
+          });
+          hasil.tableRows.push({
+            label: "Masa Ihtiyath (Kadar Ingat)",
+            start: globalStart,
+            end: globalEnd,
+            durasiJam: totalRentangJam,
+            status: "IHTIYATH",
+            catatan: `Ingat kadar ${adatHaidHari} hari, lupa tanggal mulai`,
+          });
+          hasil.mandiGuide =
+            "Wajib mandi setiap kali hendak shalat fardhu karena ada potensi terputusnya haid di setiap waktu.";
+          hasil.shalatGuide =
+            "Wajib shalat 5 waktu setelah bersuci dan menyumbat darah.";
+          hasil.puasaGuide = `Wajib puasa Ramadhan sebulan penuh. Wajib meng-qadha puasa sebanyak durasi kebiasaan yang diingat (${adatHaidHari} hari) ditambah 1 atau 2 hari sesuai kaidah pembebasan tanggungan.`;
+          hasil.jimaGuide =
+            "Haram berhubungan suami-istri secara mutlak selama darah masih mengalir.";
+          hasil.ibaratKitab = {
+            kitab: "Mughni al-Muhtaj – Syaikh al-Khatib asy-Syirbini",
+            arab: "وَالذَّاكِرَةُ لِلْقَدْرِ دُونَ الْوَقْتِ كَالنَّاسِيَةِ لَهُمَا فِي الْأَحْكَامِ لِأَنَّ كُلَّ زَمَنٍ يَحْتَمِلُ الْحَيْضَ وَالطُّهْرَ",
+            trans:
+              "Dan wanita yang mengingat kadar durasi tanpa mengingat waktunya dihukumi seperti yang lupa keduanya dalam seluruh hukum amaliah, karena setiap masa berpotensi haid dan suci.",
+          };
+          tampilkanHasil(hasil);
+          return;
+        }
+
+        // 4. KASUS TAMYIZ SAH PADA MUBTADA'AH / MU'TADAH
+        let maxScore = Math.max(...rawKDs.map((s) => s.kekuatan));
+        let minScore = Math.min(...rawKDs.map((s) => s.kekuatan));
+
+        // PERBAIKAN BUG #1 (fikih): syarat tamyiz sah bukan hanya soal AMBANG JAM
+        // (durasi kuat 24j-15hr, durasi lemah >=15hr), tapi juga harus memenuhi POLA:
+        // satu blok darah kuat di awal, diikuti satu blok darah lemah tanpa berselang-seling.
+        // Sebelumnya kode hanya mengecek total akumulasi, sehingga pola kuat-lemah-kuat-lemah
+        // bisa lolos dianggap tamyiz sah walau tidak sah secara fikih.
+        let polaTamyiz = { sah: false };
+        if (maxScore > minScore) {
+          polaTamyiz = validasiPolaTamyiz(rawKDs, episodes, maxScore);
+        }
+        let isTamyizSah =
+          polaTamyiz.sah &&
+          polaTamyiz.durasiKuatJam >= H1_JAM &&
+          polaTamyiz.durasiKuatJam <= H15_JAM &&
+          polaTamyiz.durasiLemahJam >= H15_JAM;
+
+        if (
+          isTamyizSah &&
+          (userStatus === "MUBTADAH" || userStatus === "MUTADAH")
+        ) {
+          hasil.kategoriBadge = "badge-haid";
+          hasil.namaKategori =
+            userStatus === "MUBTADAH"
+              ? "MUBTADA'AH MUMAYYIZAH"
+              : "MU'TADAH MUMAYYIZAH";
+          hasil.ringkasan = `Syarat Tamyiz terpenuhi secara sah: Darah Kuat berdurasi <b>${(polaTamyiz.durasiKuatJam / 24).toFixed(1)} hari</b> (≥24j dan ≤15 hari, satu blok di awal) serta Darah Lemah berdurasi <b>${(polaTamyiz.durasiLemahJam / 24).toFixed(1)} hari</b> (≥15 hari, satu blok setelahnya). Hukum tamyiz dimenangkan atas adat.`;
+
+          const segmenKuat = rawKDs.slice(0, polaTamyiz.idxTransisi);
+          const segmenLemah = rawKDs.slice(polaTamyiz.idxTransisi);
+          hasil.visualSegments.push({
+            label: "Haid (Kuat)",
+            jam: polaTamyiz.durasiKuatJam,
+            color: "var(--color-haid)",
+          });
+          hasil.visualSegments.push({
+            label: "Ist (Lemah)",
+            jam: polaTamyiz.durasiLemahJam,
+            color: "var(--color-istihadhah)",
+          });
+          hasil.tableRows.push({
+            label: "Darah Kuat (Haid)",
+            start: polaTamyiz.kuatStart,
+            end: polaTamyiz.kuatEnd,
+            durasiJam: polaTamyiz.durasiKuatJam,
+            status: "HAID",
+            catatan: ringkasSifatDarah(segmenKuat),
+          });
+          hasil.tableRows.push({
+            label: "Darah Lemah (Istihadhah)",
+            start: polaTamyiz.lemahStart,
+            end: polaTamyiz.lemahEnd,
+            durasiJam: polaTamyiz.durasiLemahJam,
+            status: "ISTIHADHAH",
+            catatan: ringkasSifatDarah(segmenLemah),
+          });
+          hasil.haidSahList.push({
+            label: "HAID (Tamyiz)",
+            start: polaTamyiz.kuatStart,
+            end: polaTamyiz.kuatEnd,
+          });
+
+          hasil.mandiGuide =
+            "Wajib mandi besar tepat saat darah kuat selesai beralih ke darah lemah.";
+          hasil.shalatGuide =
+            "Selama darah kuat haram shalat. Begitu masuk darah lemah wajib shalat fardhu setelah mandi.";
+          hasil.puasaGuide =
+            "Wajib meng-qadha puasa pada masa darah kuat saja; puasa pada masa darah lemah dihukumi sah.";
+          hasil.jimaGuide =
+            "Halal bersetubuh pada masa darah lemah setelah mandi dari darah kuat.";
+          hasil.ibaratKitab = {
+            kitab: "Al-Minhaj – Imam an-Nawawi",
+            arab: "وَالْمُمَيِّزَةُ تَعْمَلُ بِالتَّمْيِيزِ فَيَكُونُ الْقَوِيُّ حَيْضًا وَالضَّعِيفُ طُهْرًا إِذَا لَمْ يَنْقُصِ الْقَوِيُّ عَنْ يَوْمٍ وَلَيْلَةٍ وَلَا عَبَرَ خَمْسَةَ عَشَرَ وَلَا نَقَصَ الضَّعِيفُ عَنْهَا",
+            trans:
+              "Dan wanita mumayyizah beramal dengan tamyiznya, maka darah kuat adalah haid dan darah lemah adalah suci (istihadhah) apabila darah kuat tidak kurang dari 24 jam dan tidak melampaui 15 hari serta darah lemah tidak kurang dari 15 hari.",
+          };
+          tampilkanHasil(hasil);
+          return;
+        }
+
+        const episodeTunggal = episodes.length === 1 ? episodes[0] : null;
+
+        // 5. MUBTADA'AH GHOIRU MUMAYYIZAH (>15 Hari)
+        if (
+          userStatus === "MUBTADAH" &&
+          episodeTunggal &&
+          episodeTunggal.durasiJam > H15_JAM
+        ) {
+          hasil.kategoriBadge = "badge-istihadhah";
+          hasil.namaKategori = "MUBTADA'AH GHOIRU MUMAYYIZAH";
+          hasil.ringkasan = `Wanita pemula tanpa tamyiz sah yang darahnya melampaui 15 hari. Hukumnya: <b>1 Hari 1 Malam (24 Jam) pertama adalah HAID</b>, dan <b>sisanya adalah ISTIHADHAH</b>.`;
+
+          const tEndHaid = new Date(globalStart.getTime() + H1_JAM * 3600000);
+          hasil.visualSegments.push({
+            label: "Haid (24j)",
+            jam: H1_JAM,
+            color: "var(--color-haid)",
+          });
+          hasil.visualSegments.push({
+            label: "Istihadhah",
+            jam: totalRentangJam - H1_JAM,
+            color: "var(--color-istihadhah)",
+          });
+
+          hasil.tableRows.push({
+            label: "Haid Minimal (24 Jam)",
+            start: globalStart,
+            end: tEndHaid,
+            durasiJam: H1_JAM,
+            status: "HAID",
+            catatan: "Kadar Minimal Haid",
+          });
+          hasil.tableRows.push({
+            label: "Istihadhah (Suci Hukmi)",
+            start: tEndHaid,
+            end: globalEnd,
+            durasiJam: totalRentangJam - H1_JAM,
+            status: "ISTIHADHAH",
+            catatan: "Penyempurna Siklus",
+          });
+
+          hasil.haidSahList.push({
+            label: "HAID (24 Jam)",
+            start: globalStart,
+            end: tEndHaid,
+          });
+          hasil.mandiGuide =
+            "Pada daur pertama mandi saat mencapai 15 hari dan qadha shalat hari ke-2 s.d. 15. Pada daur berikutnya langsung bersuci setelah 24 jam pertama.";
+          hasil.shalatGuide =
+            "Wajib meng-qadha shalat mulai jam ke-25 hingga hari ke-15 (pada daur pertama).";
+          hasil.puasaGuide = "Puasa sah pada masa istihadhah setelah bersuci.";
+          hasil.jimaGuide =
+            "Halal jima' setelah mandi wajib di luar 24 jam pertama.";
+          hasil.ibaratKitab = {
+            kitab: "Nihayat al-Muhtaj – Imam ar-Ramli",
+            arab: "وَالْمُبْتَدَأَةُ غَيْرُ الْمُمَيِّزَةِ حَيْضُهَا يَوْمٌ وَلَيْلَةٌ وَطُهْرُهَا تِسْعَةٌ وَعِشْرُونَ يَوْمًا",
+            trans:
+              "Dan wanita mubtada'ah yang tidak memiliki tamyiz haidnya adalah sehari semalam (24 jam) dan sucinya adalah dua puluh sembilan hari.",
+          };
+          tampilkanHasil(hasil);
+          return;
+        }
+
+        // 6. MU'TADAH GHOIRU MUMAYYIZAH (>15 Hari)
+        if (
+          userStatus === "MUTADAH" &&
+          episodeTunggal &&
+          episodeTunggal.durasiJam > H15_JAM
+        ) {
+          hasil.kategoriBadge = "badge-istihadhah";
+          hasil.namaKategori = "MU'TADAH GHOIRU MUMAYYIZAH";
+          const adatJam = adatHaidHari * 24;
+          hasil.ringkasan = `Darah mengalir <b>${(totalRentangJam / 24).toFixed(1)} hari</b> (>15 hari) tanpa pembeda (tamyiz). Dikembalikan kepada durasi kebiasaannya: <b>${adatHaidHari} Hari pertama adalah HAID</b> dan <b>sisanya adalah ISTIHADHAH</b>.`;
+
+          const tEndHaid = new Date(globalStart.getTime() + adatJam * 3600000);
+          hasil.visualSegments.push({
+            label: `Haid (${adatHaidHari}h)`,
+            jam: adatJam,
+            color: "var(--color-haid)",
+          });
+          hasil.visualSegments.push({
+            label: "Istihadhah",
+            jam: totalRentangJam - adatJam,
+            color: "var(--color-istihadhah)",
+          });
+
+          hasil.tableRows.push({
+            label: `Haid Sesuai 'Ādah (${adatHaidHari} Hari)`,
+            start: globalStart,
+            end: tEndHaid,
+            durasiJam: adatJam,
+            status: "HAID",
+            catatan: "Kembali ke Durasi Adat",
+          });
+          hasil.tableRows.push({
+            label: "Istihadhah",
+            start: tEndHaid,
+            end: globalEnd,
+            durasiJam: totalRentangJam - adatJam,
+            status: "ISTIHADHAH",
+            catatan: "Kelebihan dari Adat",
+          });
+
+          hasil.haidSahList.push({
+            label: `HAID (${adatHaidHari} Hari)`,
+            start: globalStart,
+            end: tEndHaid,
+          });
+          hasil.mandiGuide = `Wajib mandi besar setelah tuntasnya hari ke-${adatHaidHari}.`;
+          hasil.shalatGuide = `Haram shalat selama ${adatHaidHari} hari pertama. Setelahnya wajib berwudhu tiap masuk waktu shalat dan tetap shalat.`;
+          hasil.puasaGuide = `Puasa wajib di-qadha untuk masa ${adatHaidHari} hari pertama saja. Puasa setelahnya dihukumi sah.`;
+          hasil.jimaGuide = `Halal hubungan suami-istri pada masa istihadhah setelah mandi besar dari haid.`;
+          hasil.ibaratKitab = {
+            kitab: "Tuhfat al-Muhtaj – Imam Ibnu Hajar al-Haitami",
+            arab: "وَالْمُعْتَادَةُ غَيْرُ الْمُمَيِّزَةِ تُرَدُّ إِلَى عَادَتِهَا قَدْرًا وَوَقْتًا فَيَكُونُ حَيْضُهَا قَدْرَ عَادَتِهَا وَمَا زَادَ اسْتِحَاضَةٌ",
+            trans:
+              "Dan wanita mu'tadah ghayr mumayyizah dikembalikan kepada kebiasaannya baik dalam kadar maupun waktu, sehingga haidnya adalah seukuran kebiasaannya dan kelebihannya adalah istihadhah.",
+          };
+          tampilkanHasil(hasil);
+          return;
+        }
+
+        // =====================================================================
+        // 7. ENGINE MULTI-SEGMENT BERANTAI & LOOK-AHEAD AGGREGATOR (SAHB & TAKMIL)
+        // =====================================================================
+        let haidAktif = null;
+        let takmilEndLimit = null;
+        let lastEndPointer = globalStart;
+
+        for (let i = 0; i < rawKDs.length; i++) {
+          const curKD = rawKDs[i];
+
+          if (curKD.start > lastEndPointer && haidAktif === null && i > 0) {
+            const gapJam = diffJam(curKD.start, lastEndPointer);
+            hasil.visualSegments.push({
+              label: "Suci Sela",
+              jam: gapJam,
+              color: "var(--color-suci)",
+            });
+            hasil.tableRows.push({
+              label: "Suci Sela",
+              start: lastEndPointer,
+              end: curKD.start,
+              durasiJam: gapJam,
+              status: "SUCI",
+              catatan: "Masa Bersih Murni",
+            });
+          }
+
+          if (haidAktif === null) {
+            // PERBAIKAN BUG #2: reset takmilEndLimit setiap kali memulai pencarian
+            // haid baru dari kondisi "tidak ada haid aktif", supaya nilai lama dari
+            // siklus sebelumnya tidak pernah terbawa ke pengambilan keputusan berikutnya.
+            takmilEndLimit = null;
+
+            let sumDarahWindow = 0;
+            for (let j = i; j < rawKDs.length; j++) {
+              const timeFromStart = diffJam(rawKDs[j].end, curKD.start);
+              if (timeFromStart <= H15_JAM) {
+                sumDarahWindow += rawKDs[j].durasiJam;
+              } else {
+                const sisaDalamWindow =
+                  H15_JAM - diffJam(rawKDs[j].start, curKD.start);
+                if (sisaDalamWindow > 0) sumDarahWindow += sisaDalamWindow;
+                break;
+              }
+            }
+
+            if (sumDarahWindow >= H1_JAM) {
+              haidAktif = {
+                start: curKD.start,
+                end: curKD.end,
+                totalDarahJam: curKD.durasiJam,
+                label: `HAID ${hasil.haidSahList.length + 1}`,
+              };
+              hasil.visualSegments.push({
+                label: haidAktif.label,
+                jam: curKD.durasiJam,
+                color: "var(--color-haid)",
+              });
+              hasil.tableRows.push({
+                label: haidAktif.label,
+                start: curKD.start,
+                end: curKD.end,
+                durasiJam: curKD.durasiJam,
+                status: "HAID",
+                catatan: "Awal Haid Sah",
+              });
+              hasil.haidSahList.push(haidAktif);
+            } else {
+              hasil.visualSegments.push({
+                label: "Fasad (<24j)",
+                jam: curKD.durasiJam,
+                color: "var(--color-fasad)",
+              });
+              hasil.tableRows.push({
+                label: "Darah Fasad",
+                start: curKD.start,
+                end: curKD.end,
+                durasiJam: curKD.durasiJam,
+                status: "FASAD",
+                catatan: "Akumulasi < 24 Jam",
+              });
+            }
+            lastEndPointer = curKD.end;
+            continue;
+          }
+
+          const prevEnd = rawKDs[i - 1].end;
+          const jedaBersihJam = diffJam(curKD.start, prevEnd);
+
+          if (jedaBersihJam >= H15_JAM) {
+            hasil.visualSegments.push({
+              label: "Suci Sempurna",
+              jam: jedaBersihJam,
+              color: "var(--color-suci)",
+            });
+            hasil.tableRows.push({
+              label: "Suci Sempurna (≥15 Hari)",
+              start: prevEnd,
+              end: curKD.start,
+              durasiJam: jedaBersihJam,
+              status: "SUCI",
+              catatan: "Pemisah Antar Siklus",
+            });
+
+            let sumDarahNext = 0;
+            for (let j = i; j < rawKDs.length; j++) {
+              const timeFromStart = diffJam(rawKDs[j].end, curKD.start);
+              if (timeFromStart <= H15_JAM) sumDarahNext += rawKDs[j].durasiJam;
+              else {
+                const sisaDalamWindow =
+                  H15_JAM - diffJam(rawKDs[j].start, curKD.start);
+                if (sisaDalamWindow > 0) sumDarahNext += sisaDalamWindow;
+                break;
+              }
+            }
+
+            if (sumDarahNext >= H1_JAM) {
+              haidAktif = {
+                start: curKD.start,
+                end: curKD.end,
+                totalDarahJam: curKD.durasiJam,
+                label: `HAID ${hasil.haidSahList.length + 1}`,
+              };
+              hasil.visualSegments.push({
+                label: haidAktif.label,
+                jam: curKD.durasiJam,
+                color: "var(--color-haid)",
+              });
+              hasil.tableRows.push({
+                label: haidAktif.label,
+                start: curKD.start,
+                end: curKD.end,
+                durasiJam: curKD.durasiJam,
+                status: "HAID",
+                catatan: "Haid Baru (Lembaran Baru)",
+              });
+              hasil.haidSahList.push(haidAktif);
+              // PERBAIKAN BUG #2: reset eksplisit juga di titik ini (haid baru dimulai
+              // setelah suci sempurna) agar batas takmil siklus sebelumnya benar-benar dibuang.
+              takmilEndLimit = null;
+            } else {
+              hasil.visualSegments.push({
+                label: "Fasad (<24j)",
+                jam: curKD.durasiJam,
+                color: "var(--color-fasad)",
+              });
+              hasil.tableRows.push({
+                label: "Darah Fasad",
+                start: curKD.start,
+                end: curKD.end,
+                durasiJam: curKD.durasiJam,
+                status: "FASAD",
+                catatan: "Akumulasi < 24 Jam",
+              });
+              haidAktif = null;
+              takmilEndLimit = null;
+            }
+            lastEndPointer = curKD.end;
+            continue;
+          }
+
+          const rentangDariAwalHaidAktif = diffJam(curKD.end, haidAktif.start);
+
+          if (rentangDariAwalHaidAktif <= H15_JAM) {
+            // PERBAIKAN BUG #2: jalur Sahb -- pastikan takmilEndLimit direset ke null
+            // karena kita kembali menyambung sebagai HAID (bukan istihadhah takmil),
+            // sehingga batas takmil lama (jika ada dari percobaan sebelumnya) tidak
+            // ikut mempengaruhi evaluasi pada iterasi-iterasi berikutnya.
+            takmilEndLimit = null;
+
+            if (jedaBersihJam > 0) {
+              hasil.visualSegments.push({
+                label: `Sahb (${haidAktif.label})`,
+                jam: jedaBersihJam,
+                color: "#e57373",
+              });
+              hasil.tableRows.push({
+                label: `Masa Bersih (Sahb ${haidAktif.label})`,
+                start: prevEnd,
+                end: curKD.start,
+                durasiJam: jedaBersihJam,
+                status: "HAID (SAHB)",
+                catatan: "Ditarik Menjadi Haid",
+              });
+            }
+
+            hasil.visualSegments.push({
+              label: `Lanjutan ${haidAktif.label}`,
+              jam: curKD.durasiJam,
+              color: "var(--color-haid)",
+            });
+            hasil.tableRows.push({
+              label: `Lanjutan ${haidAktif.label}`,
+              start: curKD.start,
+              end: curKD.end,
+              durasiJam: curKD.durasiJam,
+              status: "HAID",
+              catatan: "Lanjutan Darah Nyata",
+            });
+
+            haidAktif.end = curKD.end;
+            haidAktif.totalDarahJam += curKD.durasiJam;
+          } else {
+            takmilEndLimit = new Date(
+              haidAktif.end.getTime() + H15_JAM * 3600000,
+            );
+
+            if (jedaBersihJam > 0) {
+              hasil.visualSegments.push({
+                label: "Suci Sela",
+                jam: jedaBersihJam,
+                color: "var(--color-suci)",
+              });
+              hasil.tableRows.push({
+                label: "Suci Sela (Masa Takmil)",
+                start: prevEnd,
+                end: curKD.start,
+                durasiJam: jedaBersihJam,
+                status: "SUCI",
+                catatan: "Bagian 15 Hari Suci",
+              });
+            }
+
+            if (curKD.end <= takmilEndLimit) {
+              hasil.visualSegments.push({
+                label: "Ist Takmil",
+                jam: curKD.durasiJam,
+                color: "var(--color-istihadhah)",
+              });
+              hasil.tableRows.push({
+                label: "Istihadhah (Penyempurna Suci)",
+                start: curKD.start,
+                end: curKD.end,
+                durasiJam: curKD.durasiJam,
+                status: "ISTIHADHAH",
+                catatan: "Takmilah Aqall ath-Thuhr",
+              });
+            } else if (
+              curKD.start < takmilEndLimit &&
+              curKD.end > takmilEndLimit
+            ) {
+              const durTakmilJam = diffJam(takmilEndLimit, curKD.start);
+              const durSisaHaidJam = diffJam(curKD.end, takmilEndLimit);
+
+              hasil.visualSegments.push({
+                label: "Ist Takmil",
+                jam: durTakmilJam,
+                color: "var(--color-istihadhah)",
+              });
+              hasil.tableRows.push({
+                label: "Istihadhah (Penyempurna Suci)",
+                start: curKD.start,
+                end: takmilEndLimit,
+                durasiJam: durTakmilJam,
+                status: "ISTIHADHAH",
+                catatan: "Penggenap 15 Hari Suci",
+              });
+
+              let sumSisaPlusNext = durSisaHaidJam;
+              for (let j = i + 1; j < rawKDs.length; j++) {
+                const timeFromTakmil = diffJam(rawKDs[j].end, takmilEndLimit);
+                if (timeFromTakmil <= H15_JAM) {
+                  sumSisaPlusNext += rawKDs[j].durasiJam;
+                } else {
+                  const sisaDalamWindow =
+                    H15_JAM - diffJam(rawKDs[j].start, takmilEndLimit);
+                  if (sisaDalamWindow > 0) sumSisaPlusNext += sisaDalamWindow;
+                  break;
+                }
+              }
+
+              if (sumSisaPlusNext >= H1_JAM) {
+                haidAktif = {
+                  start: takmilEndLimit,
+                  end: curKD.end,
+                  totalDarahJam: durSisaHaidJam,
+                  label: `HAID ${hasil.haidSahList.length + 1}`,
+                };
+                hasil.visualSegments.push({
+                  label: haidAktif.label,
+                  jam: durSisaHaidJam,
+                  color: "var(--color-haid)",
+                });
+                hasil.tableRows.push({
+                  label: haidAktif.label,
+                  start: takmilEndLimit,
+                  end: curKD.end,
+                  durasiJam: durSisaHaidJam,
+                  status: "HAID",
+                  catatan: "Awal Haid Sah Baru",
+                });
+                hasil.haidSahList.push(haidAktif);
+                // PERBAIKAN BUG #2: haid baru resmi dimulai dari titik takmilEndLimit,
+                // jadi batas takmil lama sudah tidak relevan lagi -> reset.
+                takmilEndLimit = null;
+              } else {
+                hasil.visualSegments.push({
+                  label: "Fasad (<24j)",
+                  jam: durSisaHaidJam,
+                  color: "var(--color-fasad)",
+                });
+                hasil.tableRows.push({
+                  label: "Sisa Fasad (<24 Jam)",
+                  start: takmilEndLimit,
+                  end: curKD.end,
+                  durasiJam: durSisaHaidJam,
+                  status: "FASAD",
+                  catatan: "Akumulasi < 24 Jam",
+                });
+                haidAktif = null;
+                takmilEndLimit = null;
+              }
+            } else {
+              let sumDarahNext = 0;
+              for (let j = i; j < rawKDs.length; j++) {
+                const timeFromStart = diffJam(rawKDs[j].end, curKD.start);
+                if (timeFromStart <= H15_JAM)
+                  sumDarahNext += rawKDs[j].durasiJam;
+                else {
+                  const sisaDalamWindow =
+                    H15_JAM - diffJam(rawKDs[j].start, curKD.start);
+                  if (sisaDalamWindow > 0) sumDarahNext += sisaDalamWindow;
+                  break;
+                }
+              }
+
+              if (sumDarahNext >= H1_JAM) {
+                haidAktif = {
+                  start: curKD.start,
+                  end: curKD.end,
+                  totalDarahJam: curKD.durasiJam,
+                  label: `HAID ${hasil.haidSahList.length + 1}`,
+                };
+                hasil.visualSegments.push({
+                  label: haidAktif.label,
+                  jam: curKD.durasiJam,
+                  color: "var(--color-haid)",
+                });
+                hasil.tableRows.push({
+                  label: haidAktif.label,
+                  start: curKD.start,
+                  end: curKD.end,
+                  durasiJam: curKD.durasiJam,
+                  status: "HAID",
+                  catatan: "Haid Sah Baru",
+                });
+                hasil.haidSahList.push(haidAktif);
+                takmilEndLimit = null;
+              } else {
+                hasil.visualSegments.push({
+                  label: "Fasad (<24j)",
+                  jam: curKD.durasiJam,
+                  color: "var(--color-fasad)",
+                });
+                hasil.tableRows.push({
+                  label: "Darah Fasad",
+                  start: curKD.start,
+                  end: curKD.end,
+                  durasiJam: curKD.durasiJam,
+                  status: "FASAD",
+                  catatan: "Akumulasi < 24 Jam",
+                });
+                haidAktif = null;
+                takmilEndLimit = null;
+              }
+            }
+          }
+          lastEndPointer = curKD.end;
+        }
+
+        hasil.kategoriBadge = "badge-haid";
+        hasil.namaKategori = "KEPUTUSAN FIKIH MASTER DEFINITIF";
+        hasil.ringkasan = `Ditemukan <b>${hasil.haidSahList.length} kali Haid Sah</b> dalam kronologi ini. Sistem berhasil mengevaluasi transisi Qaul as-Sahb, Takmilah Aqall ath-Thuhr berulang, dan pemisahan masa suci secara mandiri.`;
+
+        hasil.mandiGuide = `Wajib mandi besar setiap kali masa Haid Sah berakhir (Terdapat ${hasil.haidSahList.length} kali titik mandi wajib).`;
+        hasil.shalatGuide =
+          "Haram shalat pada masa Haid Sah. Wajib shalat fardhu pada masa Suci dan masa Istihadhah Takmil setelah membersihkan darah dan berwudhu.";
+        hasil.puasaGuide =
+          "Haram berpuasa pada masa Haid Sah (wajib di-qadha). Sah berpuasa pada masa Suci dan Istihadhah Takmil (kecuali jika bertepatan dengan Hari Raya / Hari Tasyrik).";
+        hasil.jimaGuide =
+          "Halal bersetubuh pada masa Suci Murni dan masa Istihadhah setelah mandi dari haid.";
+
+        hasil.ibaratKitab = {
+          kitab: "Fath al-Wahhab – Syaikhul Islam Zakariya al-Ansari",
+          arab: "وَإِنْ نَقَصَ الطُّهْرُ عَنْ خَمْسَةَ عَشَرَ وَتَجَاوَزَ مَجْمُوعُ الدَّمَيْنِ وَالنَّقَاءِ خَمْسَةَ عَشَرَ فَالْدَّمُ الثَّانِي فِي تَمَامِ خَمْسَةَ عَشَرَ طُهْرًا اسْتِحَاضَةٌ تَكْمِلَةً لِأَقَلِّ الطُّهْرِ وَمَا بَعْدَهُ حَيْضٌ إِنْ بَلَغَ يَوْمًا وَلَيْلَةً",
+          trans:
+            "Dan jika masa suci kurang dari 15 hari serta akumulasi dua darah dan masa bersih melampaui 15 hari, maka darah kedua yang berada pada penyempurna 15 hari suci adalah istihadhah sebagai penyempurna batas minimal suci, dan darah setelahnya adalah haid jika mencapai sehari semalam.",
+        };
+
+        tampilkanHasil(hasil);
+      }
+
+      function tampilkanHasil(hasil) {
+        document.getElementById("hasilContainer").style.display = "block";
+
+        const badge = document.getElementById("badgeKategori");
+        badge.className = `status-badge ${hasil.kategoriBadge}`;
+        badge.innerText = hasil.namaKategori;
+
+        document.getElementById("ringkasanEksekutif").innerHTML =
+          hasil.ringkasan;
+
+        const barVisual = document.getElementById("timelineBarVisual");
+        barVisual.innerHTML = "";
+        let totalJamSemua = 0;
+        hasil.visualSegments.forEach((s) => (totalJamSemua += s.jam));
+
+        hasil.visualSegments.forEach((s) => {
+          const pct = (s.jam / totalJamSemua) * 100;
+          const div = document.createElement("div");
+          div.className = "bar-segment";
+          div.style.width = `${pct}%`;
+          div.style.backgroundColor = s.color;
+          div.innerText = pct > 6 ? `${s.label}` : "";
+          div.title = `${s.label}: ${(s.jam / 24).toFixed(1)} Hari (${s.jam.toFixed(0)} Jam)`;
+          barVisual.appendChild(div);
+        });
+
+        const tbody = document.getElementById("tabelHasilSegmenBody");
+        tbody.innerHTML = "";
+        const tahrimDitemukan = [];
+
+        hasil.tableRows.forEach((r, idx) => {
+          let catatanTahrim = [];
+          // PERBAIKAN BUG #3: guard supaya loop tidak pernah tak-terhingga jika suatu
+          // saat ada baris dengan end < start (mis. dari sumber data lain di masa depan).
+          let curD = new Date(r.start);
+          let pengamanIterasi = 0;
+          while (curD <= r.end && pengamanIterasi < 400) {
+            const cTahrim = cekHariHaramPuasa(curD);
+            if (cTahrim.isHaram && !catatanTahrim.includes(cTahrim.nama)) {
+              catatanTahrim.push(cTahrim.nama);
+              if (!tahrimDitemukan.includes(cTahrim.nama))
+                tahrimDitemukan.push(cTahrim.nama);
+            }
+            curD.setDate(curD.getDate() + 1);
+            pengamanIterasi++;
+          }
+
+          const tr = document.createElement("tr");
+          let labelCatatan = r.catatan;
+          if (catatanTahrim.length > 0) {
+            labelCatatan += `<br><span style="color:var(--color-tahrim); font-weight:bold;">⚠️ ${catatanTahrim.join(", ")} (Haram Puasa)</span>`;
+          }
+
+          const colorStatus =
+            r.status === "HAID"
+              ? "#c62828"
+              : r.status === "ISTIHADHAH"
+                ? "#e65100"
+                : r.status === "IHTIYATH"
+                  ? "#6a1b9a"
+                  : "#2e7d32";
+
+          tr.innerHTML = `
+                <td>${idx + 1}</td>
+                <td><b>${r.label}</b><br><span style="color:#666; font-size:0.72rem;">${fTgl(r.start)} s/d ${fTgl(r.end)}</span></td>
+                <td>${(r.durasiJam / 24).toFixed(1)} Hari<br><span style="color:#888; font-size:0.7rem;">(${r.durasiJam.toFixed(0)} Jam)</span></td>
+                <td><span style="font-weight:bold; color:${colorStatus};">${r.status}</span></td>
+                <td>${labelCatatan}</td>
+            `;
+          tbody.appendChild(tr);
+        });
+
+        const boxAlert = document.getElementById("boxHariRayaAlert");
+        if (tahrimDitemukan.length > 0) {
+          boxAlert.style.display = "block";
+          boxAlert.className = "tahrim-alert-box";
+          boxAlert.innerHTML = `
+                <strong>PERINGATAN AYYĀM AT-TAHRĪM (HARI RAYA / HARI TASYRIK):</strong><br>
+                Terdeteksi tanggal yang bertepatan dengan <b>${tahrimDitemukan.join(", ")}</b>.
+                Secara hukum fikih, berpuasa pada hari tersebut <b>HARAM HUKUMNYA</b> bagi siapa pun, baik wanita yang sedang suci maupun mustahadhah, dan tidak sah dijadikan puasa qadha Ramadhan.
+            `;
+        } else {
+          boxAlert.style.display = "none";
+        }
+
+        if (hasil.haidSahList.length > 0) {
+          const lastHaid = hasil.haidSahList[hasil.haidSahList.length - 1];
+          const durasiHaidBaruJam = diffJam(lastHaid.end, lastHaid.start);
+          const hariHaid = (durasiHaidBaruJam / 24).toFixed(1);
+
+          document.getElementById("boxAdatBaru").innerHTML = `
+                <strong>PEMBAHARUAN ADAT (INTIQĀL AL-'ĀDAH):</strong><br>
+                • <b>Adat Haid Baru:</b> ${hariHaid} Hari (~${Math.round(durasiHaidBaruJam / 24)} Hari) — Ditetapkan dari haid sah terakhir (<b>${lastHaid.label}</b>).<br>
+                • <b>Adat Suci Baru:</b> Dihitung setelah genapnya masa suci minimal 15 hari dari selesainya haid sah terakhir.
+            `;
+        } else {
+          document.getElementById("boxAdatBaru").innerHTML =
+            `<strong>STATUS ADAT:</strong> Tidak terjadi pembaharuan adat baru.`;
+        }
+
+        document.getElementById("guideMandi").innerText = hasil.mandiGuide;
+        document.getElementById("guideShalat").innerText = hasil.shalatGuide;
+        document.getElementById("guidePuasa").innerText = hasil.puasaGuide;
+        document.getElementById("guideJima").innerText = hasil.jimaGuide;
+
+        if (hasil.ibaratKitab && hasil.ibaratKitab.arab) {
+          document.getElementById("boxIbaratKitab").innerHTML = `
+                <div style="font-weight:bold; color:var(--primary-burgundy); margin-bottom:4px;">${hasil.ibaratKitab.kitab}</div>
+                <div class="arabic">${hasil.ibaratKitab.arab}</div>
+                <div class="trans">${hasil.ibaratKitab.trans}</div>
+            `;
+        }
+
+        document
+          .getElementById("hasilContainer")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      window.onload = function () {
+        loadPreset("kasus_5kd_berantai");
+      };
+    </script>
+  </body>
+</html>

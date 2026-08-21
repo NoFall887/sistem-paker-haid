@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Build and test output
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Local configuration
+*.local
+
+# Planning and agent scratch files
+/AGENTS.md
+/.agents/
+/CLAUDE.md
+/PRD*.md
+/design_layout.md
+/implementation_plan.md
+/tasks.md
