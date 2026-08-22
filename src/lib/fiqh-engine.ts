@@ -14,9 +14,9 @@ export type UserStatus =
   | "MUTAHAYYIRAH_MUTLAQAH"
   | "DZAKIRAH_QADR"
   | "DZAKIRAH_WAQT";
-export type BloodColor = "HITAM" | "MERAH" | "PIRANG" | "KUNING" | "KERUH" | "COKELAT";
-export type BloodConsistency = "KENTAL" | "CAIR";
-export type BloodOdor = "BERAROMA" | "TIDAK_BERAROMA";
+export type BloodColor = "TIDAK_DIKETAHUI" | "HITAM" | "MERAH" | "PIRANG" | "KUNING" | "KERUH" | "COKELAT";
+export type BloodConsistency = "TIDAK_DIKETAHUI" | "KENTAL" | "CAIR";
+export type BloodOdor = "TIDAK_DIKETAHUI" | "BERAROMA" | "TIDAK_BERAROMA";
 export type BloodOrigin = "ALAMI" | "LUKA_PENYAKIT";
 export type FiqhStatus = "HAID" | "HAID_SAHB" | "NIFAS" | "ISTIHADHAH" | "SUCI" | "FASAD" | "IHTIYATH";
 export type Certainty = "YAKIN" | "ZHANNI" | "IHTIYATH";
@@ -57,6 +57,7 @@ export interface CaseInput {
   possibleHabitWindowEnd?: string;
   isFirstBleedingCycle?: boolean;
   habitHistory?: HabitCycleInput[];
+  knowsBloodCharacteristics: boolean;
   hasPostpartumBleeding: boolean;
   isPregnant?: boolean;
   deliveryAt?: string;
@@ -128,7 +129,7 @@ interface NormalizedSegment {
 interface Episode { start: number; end: number; durationHours: number; segments: NormalizedSegment[] }
 
 const JAKARTA_OFFSET_MS = 7 * HOUR_MS;
-const COLOR_RANK: Record<BloodColor, number> = { HITAM: 5, MERAH: 4, PIRANG: 3, KUNING: 2, KERUH: 1, COKELAT: 1 };
+const COLOR_RANK: Record<BloodColor, number> = { TIDAK_DIKETAHUI: 0, HITAM: 5, MERAH: 4, PIRANG: 3, KUNING: 2, KERUH: 1, COKELAT: 1 };
 const GENERAL_SOURCE: SourceReference = {
   book: "Kodifikasi Master Kaidah Fiqih Haid Mazhab Syafi'i — Edisi Terkoreksi",
   arabic: "أَقَلُّ الْحَيْضِ يَوْمٌ وَلَيْلَةٌ وَأَكْثَرُهُ خَمْسَةَ عَشَرَ يَوْمًا وَأَقَلُّ الطُّهْرِ خَمْسَةَ عَشَرَ يَوْمًا",
@@ -153,6 +154,7 @@ export const emptyCase = (): CaseInput => ({
   possibleHabitWindowEnd: "",
   isFirstBleedingCycle: true,
   habitHistory: [],
+  knowsBloodCharacteristics: false,
   hasPostpartumBleeding: false,
   isPregnant: false,
   deliveryAt: "",
@@ -165,8 +167,8 @@ export const emptyCase = (): CaseInput => ({
 export function createEmptySegment(): BloodSegmentInput {
   return {
     id: globalThis.crypto?.randomUUID?.() ?? `segment-${Date.now()}`,
-    start: "", end: "", color: "MERAH", consistency: "CAIR",
-    odor: "TIDAK_BERAROMA", origin: "ALAMI",
+    start: "", end: "", color: "TIDAK_DIKETAHUI", consistency: "TIDAK_DIKETAHUI",
+    odor: "TIDAK_DIKETAHUI", origin: "ALAMI",
   };
 }
 
@@ -191,6 +193,7 @@ const addHours = (start: number, hours: number) => start + hours * HOUR_MS;
 const traitCount = (segment: NormalizedSegment) => (segment.consistency === "KENTAL" ? 1 : 0) + (segment.odor === "BERAROMA" ? 1 : 0);
 const signature = (segment: NormalizedSegment) => `${segment.color}/${segment.consistency}/${segment.odor}`;
 const comparePrimaryStrength = (left: NormalizedSegment, right: NormalizedSegment) => traitCount(left) - traitCount(right) || COLOR_RANK[left.color] - COLOR_RANK[right.color];
+const hasUnknownCharacteristics = (segments: NormalizedSegment[]) => segments.some((segment) => segment.color === "TIDAK_DIKETAHUI" || segment.consistency === "TIDAK_DIKETAHUI" || segment.odor === "TIDAK_DIKETAHUI");
 
 export function normalizeInput(input: CaseInput): { segments: NormalizedSegment[]; episodes: Episode[]; issues: ValidationIssue[] } {
   const issues: ValidationIssue[] = [];
@@ -282,6 +285,7 @@ function summarizeBlood(segments: NormalizedSegment[]) {
 
 function tamyizPattern(segments: NormalizedSegment[], episodes: Episode[]) {
   const natural = segments.filter((segment) => segment.origin === "ALAMI");
+  if (hasUnknownCharacteristics(natural)) return null;
   if (!natural.length || episodes.length !== 1 || episodes[0].segments.some((segment) => segment.origin !== "ALAMI")) return null;
   const first = natural[0];
   if (natural.some((segment) => comparePrimaryStrength(segment, first) > 0)) return null;
@@ -384,14 +388,24 @@ function analyzeMemoryCategory(input: CaseInput, segments: NormalizedSegment[], 
 }
 
 function analyzeTamyiz(input: CaseInput, segments: NormalizedSegment[], episodes: Episode[], result: AnalysisResult) {
+  if (!input.knowsBloodCharacteristics) return false;
   const pattern = tamyizPattern(segments, episodes);
   if (!pattern || pattern.strongHours < 24 || pattern.strongHours > 360 || pattern.weakHours < 360) return false;
+  const firstMubtadahCycle = input.userStatus === "MUBTADAH" && input.isFirstBleedingCycle !== false;
+  const categoryRule = input.userStatus === "MUBTADAH" ? "MUST-01" : "MUST-03";
   result.category = input.userStatus === "MUBTADAH" ? "MUBTADA'AH MUMAYYIZAH" : "MU'TADAH MUMAYYIZAH";
-  result.summary = "Tamyiz sah: jumlah sifat kuat didahulukan, lalu warna, lalu darah terdahulu ketika benar-benar setara; tamyiz mendahului adat.";
-  addRow(result, "Darah kuat — haid", pattern.strongStart, pattern.strongEnd, "HAID", summarizeBlood(pattern.natural.slice(0, pattern.transition)), ["TAMYIZ-ORDER", "TAMYIZ-VALID"], "YAKIN");
-  addRow(result, "Darah lemah — istihadhah", pattern.weakStart, pattern.weakEnd, "ISTIHADHAH", summarizeBlood(pattern.natural.slice(pattern.transition)), ["TAMYIZ-VALID"], "YAKIN");
+  result.summary = `Tamyiz sah: jumlah sifat kuat didahulukan, lalu warna, lalu darah terdahulu ketika benar-benar setara; tamyiz mendahului adat.${firstMubtadahCycle ? " Pada daur pertama, kepastian istihadhah baru diketahui setelah darah tembus 15 hari." : ""}`;
+  addRow(result, "Darah kuat — haid", pattern.strongStart, pattern.strongEnd, "HAID", summarizeBlood(pattern.natural.slice(0, pattern.transition)), [categoryRule, "TAMYIZ-ORDER", "TAMYIZ-VALID"], "YAKIN");
+  addRow(result, "Darah lemah — istihadhah", pattern.weakStart, pattern.weakEnd, "ISTIHADHAH", summarizeBlood(pattern.natural.slice(pattern.transition)), [categoryRule, "TAMYIZ-VALID"], "YAKIN");
   result.haidPeriods.push({ label: "HAID TAMYIZ", start: pattern.strongStart, end: pattern.strongEnd });
-  result.guidance = { bath: "Mandi saat darah kuat beralih menjadi darah lemah.", prayer: "Tidak shalat pada darah kuat; shalat pada darah lemah setelah mandi.", fasting: "Puasa darah kuat tidak sah; puasa darah lemah sah.", intimacy: "Boleh pada istihadhah setelah mandi dari haid." };
+  result.guidance = firstMubtadahCycle
+    ? {
+        bath: "Pada daur pertama, tetap menahan diri sampai darah tembus 15 hari. Begitu masuk hari ke-16, wajib langsung mandi besar.",
+        prayer: "Qadha seluruh shalat fardhu yang ditinggalkan sejak darah berubah lemah sampai akhir hari ke-15. Pada daur berikutnya, langsung shalat setelah darah berubah lemah dan mandi.",
+        fasting: "Darah kuat adalah haid dan darah lemah secara akhir berstatus istihadhah; ibadah daur pertama diselesaikan setelah kepastian pada hari ke-16.",
+        intimacy: "Pada daur pertama, ikuti kehati-hatian sampai darah tembus 15 hari; setelah mandi pada hari ke-16 berlaku hukum istihadhah.",
+      }
+    : { bath: "Mandi saat darah kuat beralih menjadi darah lemah.", prayer: "Tidak shalat pada darah kuat; shalat pada darah lemah setelah mandi.", fasting: "Puasa darah kuat tidak sah; puasa darah lemah sah.", intimacy: "Boleh pada istihadhah setelah mandi dari haid." };
   return true;
 }
 
@@ -410,6 +424,9 @@ function analyzeSingleLong(input: CaseInput, segments: NormalizedSegment[], epis
   const haidStart = validRememberedStart ? rememberedStart! : start;
   if (!mubtadah && !validRememberedStart) result.assumptions.push("Timestamp mulai adat Mu'tadah tidak diisi atau berada di luar episode; awal episode dipakai sebagai waktu adat.");
   const haidEnd = Math.min(addHours(haidStart, hours), end);
+  const natural = segments.filter((segment) => segment.origin === "ALAMI");
+  if (!input.knowsBloodCharacteristics) result.assumptions.push("Tamyiz tidak dinilai karena pengguna menyatakan tidak dapat mengamati perbedaan sifat darah.");
+  else if (hasUnknownCharacteristics(natural)) result.assumptions.push("Tamyiz tidak dinilai karena ada sifat darah alami yang tidak diketahui.");
   result.category = mubtadah ? "MUBTADA'AH GHOIRU MUMAYYIZAH" : "MU'TADAH GHOIRU MUMAYYIZAH";
   result.categoryTone = "istihadhah";
   result.summary = mubtadah ? "Darah melampaui 15 hari tanpa tamyiz: 24 jam haid dan 29 hari suci hukmi dalam daur 30 hari." : `Darah melampaui 15 hari tanpa tamyiz: kembali kepada adat ${hours} jam pada waktu adat.`;
@@ -539,7 +556,11 @@ function analyzeNifas(input: CaseInput, allSegments: NormalizedSegment[], result
     if (postpartumHabit && postpartumHabit > 0 && postpartumHabit <= MAX_NIFAS_HOURS) nifasLimit = addHours(firstNatural.start, postpartumHabit);
     else {
       const postEpisodes = episodesFrom(after.filter((segment) => segment.origin === "ALAMI"));
-      const pattern = tamyizPattern(after, postEpisodes);
+      const naturalAfter = after.filter((segment) => segment.origin === "ALAMI");
+      const hasUnknown = hasUnknownCharacteristics(naturalAfter);
+      const pattern = input.knowsBloodCharacteristics && !hasUnknown ? tamyizPattern(after, postEpisodes) : null;
+      if (!input.knowsBloodCharacteristics) result.assumptions.push("Tamyiz nifas tidak dinilai karena pengguna menyatakan tidak dapat mengamati perbedaan sifat darah.");
+      else if (hasUnknown) result.assumptions.push("Tamyiz nifas tidak dinilai karena ada sifat darah alami yang tidak diketahui.");
       if (pattern && pattern.strongHours <= MAX_NIFAS_HOURS && pattern.weakHours >= 360) nifasLimit = pattern.strongEnd;
       else nifasLimit = firstNatural.start + MINUTE_MS;
     }
@@ -646,8 +667,11 @@ function finish(input: CaseInput, result: AnalysisResult) {
   result.rows.sort((a, b) => a.start - b.start || a.end - b.end);
   rebuildTimeline(result);
   result.fastingWarnings = collectFastingWarnings(result.rows);
+  const deferredFirstTamyiz = input.userStatus === "MUBTADAH" && input.isFirstBleedingCycle !== false && result.category === "MUBTADA'AH MUMAYYIZAH";
   for (const period of [...result.haidPeriods, ...result.nifasPeriods]) {
-    result.worshipEvents.push({ at: period.end, type: "MANDI", description: `Mandi wajib pada akhir ${period.label.toLowerCase()}.`, certainty: "YAKIN" });
+    const mandiAt = deferredFirstTamyiz && period.label === "HAID TAMYIZ" ? addHours(period.start, 360) : period.end;
+    result.worshipEvents.push({ at: mandiAt, type: "MANDI", description: deferredFirstTamyiz ? "Mandi wajib saat darah daur pertama tembus 15 hari dan masuk hari ke-16." : `Mandi wajib pada akhir ${period.label.toLowerCase()}.`, certainty: "YAKIN" });
+    if (deferredFirstTamyiz && period.label === "HAID TAMYIZ") result.worshipEvents.push({ at: mandiAt, type: "QADHA", description: "Qadha shalat fardhu yang ditinggalkan selama darah lemah sebelum kepastian istihadhah.", certainty: "YAKIN" });
   }
   if (PRAYER_TIME_FEATURE_ENABLED) appendPrayerEvents(input, result);
   const lastHaid = result.haidPeriods.at(-1);

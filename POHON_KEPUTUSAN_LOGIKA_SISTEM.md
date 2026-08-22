@@ -1,9 +1,10 @@
 # Pohon Keputusan Logika Sistem
 
-Dokumen ini adalah peta pengetahuan turunan dari
+Dokumen ini adalah peta pengetahuan turunan dari DOCX kodifikasi terkoreksi dan
 [`SISTEM_PAKAR_FIQIH_HAID_MASTER.html`](./SISTEM_PAKAR_FIQIH_HAID_MASTER.html).
 Diagram menggambarkan urutan eksekusi kode, bukan verifikasi independen atas
-kebenaran fikihnya. Jika terdapat perbedaan, HTML kanonis tetap menjadi acuan.
+kebenaran fikihnya. Kedua sumber kanonik harus tetap selaras; keputusan eksplisit
+pengguna mengikuti aturan daur pertama Mubtada'ah Mumayyizah dalam DOCX.
 
 ## 1. Pohon routing utama
 
@@ -12,7 +13,7 @@ flowchart TD
     A["Input profil dan log darah"] --> B["Abaikan baris dengan kedua tanggal kosong"]
     B --> C{"Baris lain lengkap,<br/>tanggal valid, dan akhir > awal?"}
     C -- "Tidak" --> STOPV["Hentikan analisis dan tampilkan<br/>kesalahan beserta nomor baris"]
-    C -- "Ya" --> D["Hitung durasi dan skor kekuatan"]
+    C -- "Ya" --> D["Hitung durasi; simpan sifat fisik<br/>tanpa memaksakan tamyiz"]
     D --> E0["Urutkan segmen berdasarkan waktu mulai"]
     E0 --> E1{"Ada overlap?"}
     E1 -- "Ya" --> STOPV
@@ -81,28 +82,24 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["Hitung skor setiap segmen"] --> B["Skor = warna + sifat"]
-
-    B --> B1["Warna:<br/>Hitam 50, Merah 40, Cokelat 30,<br/>Kuning 20, Keruh 10"]
-    B --> B2["Sifat:<br/>Kental +5, Cair +0"]
-
-    B1 --> C["Cari skor maksimum dan minimum"]
-    B2 --> C
-
-    C --> C1{"Tepat satu episode kontinu?"}
+    A{"Pengguna dapat mengamati<br/>sifat darah?"}
+    A -- "Tidak" --> X0["Tamyiz tidak dinilai;<br/>catat asumsi"]
+    A -- "Ya" --> A1{"Warna, kekentalan, dan aroma<br/>setiap darah alami diketahui?"}
+    A1 -- "Tidak" --> X0
+    A1 -- "Ya" --> B["Bandingkan jumlah sifat kuat dahulu:<br/>kental dan beraroma"]
+    B --> B1["Jika jumlah setara, bandingkan warna:<br/>hitam > merah > pirang > kuning > keruh/cokelat"]
+    B1 --> B2["Jika benar-benar setara,<br/>darah terdahulu dimenangkan"]
+    B2 --> C1{"Tepat satu episode kontinu?"}
     C1 -- "Tidak" --> X["Tamyiz tidak sah"]
-    C1 -- "Ya" --> D{"Maksimum > minimum?"}
-    D -- "Tidak" --> X["Tamyiz tidak sah"]
-    D -- "Ya" --> E{"Segmen pertama mempunyai<br/>skor maksimum?"}
-
-    E -- "Tidak" --> X
-    E -- "Ya" --> F{"Ditemukan transisi pertama<br/>dari skor maksimum ke lebih rendah?"}
+    C1 -- "Ya" --> E{"Darah sesudah segmen pertama<br/>ada yang lebih kuat?"}
+    E -- "Ya" --> X
+    E -- "Tidak" --> F{"Ditemukan transisi dari darah pertama<br/>ke darah lebih lemah/berbeda?"}
 
     F -- "Tidak" --> X
-    F -- "Ya" --> G{"Setelah transisi, skor maksimum<br/>muncul kembali?"}
+    F -- "Ya" --> G{"Setelah transisi, darah lebih kuat<br/>atau signature pertama muncul kembali?"}
 
     G -- "Ya" --> X
-    G -- "Tidak" --> H["Jumlahkan durasi segmen maksimum<br/>sebagai darah kuat"]
+    G -- "Tidak" --> H["Ambil blok awal sampai transisi<br/>sebagai darah kuat"]
 
     H --> I["Hitung durasi blok kuat dan blok lemah<br/>dari batas waktu kontinu"]
     I --> J{"Darah kuat ≥24 jam<br/>dan ≤360 jam?"}
@@ -117,6 +114,13 @@ flowchart TD
     Y --> Y2["Satu blok lemah agregat = Istihadhah"]
     Y1 --> Y3["Tamyiz didahulukan atas adat"]
     Y2 --> Y3
+    Y3 --> Z{"Mubtada'ah?"}
+    Z -- "Bukan / Mu'tadah" --> Z1["Mandi saat darah kuat<br/>beralih menjadi lemah"]
+    Z -- "Ya, daur berikutnya" --> Z1
+    Z -- "Ya, daur pertama" --> Z2["Tetap menahan diri sampai<br/>darah tembus 15 hari"]
+    Z2 --> Z3["Masuk hari ke-16: mandi dan qadha<br/>shalat yang ditinggalkan selama darah lemah"]
+
+    X0 --> X1["Gunakan rute Ghairu Mumayyizah/adat<br/>tanpa menghapus sifat yang tersimpan"]
 ```
 
 ## 4. Subtree C — engine multi-segmen, Sahb, dan Takmilah

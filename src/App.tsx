@@ -203,6 +203,7 @@ export default function App() {
               input={caseInput}
               issues={issues}
               saveState={saveState}
+              onCharacteristicsKnowledgeChange={(knowsBloodCharacteristics) => updateCase({ knowsBloodCharacteristics })}
               onUpdateSegment={updateSegment}
               onAddSegment={addSegment}
               onRemoveSegment={removeSegment}

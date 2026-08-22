@@ -25,6 +25,7 @@ describe("kalender Islamic Civil", () => {
 
     const tooEarly = analyzeCase({
       userStatus: "MUBTADAH",
+      knowsBloodCharacteristics: false,
       hasPostpartumBleeding: false,
       birthDate,
       segments: [{ id: "a", start: formatJakartaInput(birthday - 16 * 24 * 3_600_000), end: formatJakartaInput(birthday - 15 * 24 * 3_600_000), color: "MERAH", consistency: "CAIR", odor: "TIDAK_BERAROMA", origin: "ALAMI" }],
@@ -33,6 +34,7 @@ describe("kalender Islamic Civil", () => {
 
     const eligible = analyzeCase({
       userStatus: "MUBTADAH",
+      knowsBloodCharacteristics: false,
       hasPostpartumBleeding: false,
       birthDate,
       segments: [{ id: "a", start: formatJakartaInput(threshold), end: formatJakartaInput(threshold + 24 * 3_600_000), color: "MERAH", consistency: "CAIR", odor: "TIDAK_BERAROMA", origin: "ALAMI" }],

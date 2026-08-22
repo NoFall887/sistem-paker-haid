@@ -53,6 +53,7 @@ export function TimelineSection({
   input,
   issues,
   saveState,
+  onCharacteristicsKnowledgeChange,
   onUpdateSegment,
   onAddSegment,
   onRemoveSegment,
@@ -64,6 +65,7 @@ export function TimelineSection({
   input: CaseInput;
   issues: ValidationIssue[];
   saveState: "saved" | "saving" | "error";
+  onCharacteristicsKnowledgeChange: (value: boolean) => void;
   onUpdateSegment: <K extends keyof BloodSegmentInput>(
     id: string,
     field: K,
@@ -96,15 +98,42 @@ export function TimelineSection({
           riwayat setelah selesai.
         </AlertDescription>
       </Alert>
+      <div className="mb-3 rounded-lg border bg-card p-3">
+        <label className="flex cursor-pointer items-start gap-3">
+          <input
+            type="checkbox"
+            className="mt-1 size-4 accent-primary"
+            checked={input.knowsBloodCharacteristics}
+            onChange={(event) => onCharacteristicsKnowledgeChange(event.target.checked)}
+          />
+          <span>
+            <span className="block text-sm font-medium">
+              Saya dapat mengamati perbedaan warna, kekentalan, atau aroma darah.
+            </span>
+            <span className="mt-1 block text-xs text-muted-foreground">
+              Pengamatan ini hanya menyediakan data. Aplikasi tetap menentukan apakah tamyiz sah dan hasilnya Mumayyizah.
+            </span>
+          </span>
+        </label>
+      </div>
       <div className="overflow-hidden rounded-lg border bg-card">
         {!!input.segments.length && (
-          <div className="hidden grid-cols-[2rem_minmax(10rem,1.2fr)_minmax(10rem,1.2fr)_minmax(7rem,.8fr)_minmax(6rem,.65fr)_minmax(7rem,.8fr)_minmax(8rem,.85fr)_4rem] items-center gap-2 border-b bg-muted/60 px-2 py-1.5 text-xs font-medium text-muted-foreground xl:grid">
+          <div className={cn(
+            "hidden items-center gap-2 border-b bg-muted/60 px-2 py-1.5 text-xs font-medium text-muted-foreground xl:grid",
+            input.knowsBloodCharacteristics
+              ? "grid-cols-[2rem_minmax(10rem,1.2fr)_minmax(10rem,1.2fr)_minmax(7rem,.8fr)_minmax(6rem,.65fr)_minmax(7rem,.8fr)_minmax(8rem,.85fr)_4rem]"
+              : "grid-cols-[2rem_minmax(10rem,1fr)_minmax(10rem,1fr)_minmax(9rem,.8fr)_4rem]",
+          )}>
             <span>No.</span>
             <span>Mulai keluar</span>
             <span>Berhenti / mampet</span>
-            <span>Warna</span>
-            <span>Sifat</span>
-            <span>Aroma</span>
+            {input.knowsBloodCharacteristics && (
+              <>
+                <span>Warna</span>
+                <span>Sifat</span>
+                <span>Aroma</span>
+              </>
+            )}
             <span>Asal</span>
             <span className="text-right">Aksi</span>
           </div>
@@ -118,6 +147,7 @@ export function TimelineSection({
               issue={
                 issues.find((issue) => issue.segmentId === segment.id)?.message
               }
+              showCharacteristics={input.knowsBloodCharacteristics}
               onUpdate={onUpdateSegment}
               onRemove={() => onRemoveSegment(segment.id)}
             />
@@ -165,12 +195,14 @@ function BloodSegmentRow({
   segment,
   index,
   issue,
+  showCharacteristics,
   onUpdate,
   onRemove,
 }: {
   segment: BloodSegmentInput;
   index: number;
   issue?: string;
+  showCharacteristics: boolean;
   onUpdate: <K extends keyof BloodSegmentInput>(
     id: string,
     field: K,
@@ -182,7 +214,10 @@ function BloodSegmentRow({
     <div
       aria-invalid={Boolean(issue)}
       className={cn(
-        "grid grid-cols-2 gap-2 p-2 xl:grid-cols-[2rem_minmax(10rem,1.2fr)_minmax(10rem,1.2fr)_minmax(7rem,.8fr)_minmax(6rem,.65fr)_minmax(7rem,.8fr)_minmax(8rem,.85fr)_4rem] xl:items-end",
+        "grid grid-cols-2 gap-2 p-2 xl:items-end",
+        showCharacteristics
+          ? "xl:grid-cols-[2rem_minmax(10rem,1.2fr)_minmax(10rem,1.2fr)_minmax(7rem,.8fr)_minmax(6rem,.65fr)_minmax(7rem,.8fr)_minmax(8rem,.85fr)_4rem]"
+          : "xl:grid-cols-[2rem_minmax(10rem,1fr)_minmax(10rem,1fr)_minmax(9rem,.8fr)_4rem]",
         issue && "bg-destructive/5",
       )}
     >
@@ -194,7 +229,7 @@ function BloodSegmentRow({
           {index + 1}
         </span>
       </div>
-      <div className="flex min-h-9 items-center justify-end gap-1 xl:col-start-8 xl:row-start-1">
+      <div className={cn("flex min-h-9 items-center justify-end gap-1 xl:row-start-1", showCharacteristics ? "xl:col-start-8" : "xl:col-start-5")}>
         {issue && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -253,7 +288,7 @@ function BloodSegmentRow({
           onChange={(event) => onUpdate(segment.id, "end", event.target.value)}
         />
       </div>
-      <div className="min-w-0 space-y-1 xl:col-start-4 xl:row-start-1 xl:space-y-0">
+      {showCharacteristics && <div className="min-w-0 space-y-1 xl:col-start-4 xl:row-start-1 xl:space-y-0">
         <Label className="text-xs xl:sr-only" htmlFor={`${segment.id}-color`}>
           Warna darah
         </Label>
@@ -274,8 +309,8 @@ function BloodSegmentRow({
             ))}
           </SelectContent>
         </Select>
-      </div>
-      <div className="min-w-0 space-y-1 xl:col-start-5 xl:row-start-1 xl:space-y-0">
+      </div>}
+      {showCharacteristics && <div className="min-w-0 space-y-1 xl:col-start-5 xl:row-start-1 xl:space-y-0">
         <Label
           className="text-xs xl:sr-only"
           htmlFor={`${segment.id}-consistency`}
@@ -299,15 +334,15 @@ function BloodSegmentRow({
             ))}
           </SelectContent>
         </Select>
-      </div>
-      <div className="min-w-0 space-y-1 xl:col-start-6 xl:row-start-1 xl:space-y-0">
+      </div>}
+      {showCharacteristics && <div className="min-w-0 space-y-1 xl:col-start-6 xl:row-start-1 xl:space-y-0">
         <Label className="text-xs xl:sr-only" htmlFor={`${segment.id}-odor`}>Aroma</Label>
-        <Select value={segment.odor ?? "TIDAK_BERAROMA"} onValueChange={(value) => onUpdate(segment.id, "odor", value as BloodOdor)}>
+        <Select value={segment.odor ?? "TIDAK_DIKETAHUI"} onValueChange={(value) => onUpdate(segment.id, "odor", value as BloodOdor)}>
           <SelectTrigger id={`${segment.id}-odor`} className="w-full"><SelectValue /></SelectTrigger>
           <SelectContent>{odors.map((item) => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}</SelectContent>
         </Select>
-      </div>
-      <div className="min-w-0 space-y-1 xl:col-start-7 xl:row-start-1 xl:space-y-0">
+      </div>}
+      <div className={cn("min-w-0 space-y-1 xl:row-start-1 xl:space-y-0", showCharacteristics ? "xl:col-start-7" : "xl:col-start-4")}>
         <Label className="text-xs xl:sr-only" htmlFor={`${segment.id}-origin`}>Asal darah</Label>
         <Select value={segment.origin ?? "ALAMI"} onValueChange={(value) => onUpdate(segment.id, "origin", value as BloodOrigin)}>
           <SelectTrigger id={`${segment.id}-origin`} className="w-full"><SelectValue /></SelectTrigger>

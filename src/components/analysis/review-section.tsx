@@ -61,6 +61,7 @@ export function ReviewSection({
               value={input.habitualStartTime || "Tidak digunakan"}
             />
             <ReviewLine label="Tanggal lahir" value={input.birthDate || "Belum diisi"} />
+            <ReviewLine label="Dapat mengamati sifat darah" value={input.knowsBloodCharacteristics ? "Ya" : "Tidak"} />
             <ReviewLine label="Darah setelah persalinan" value={input.hasPostpartumBleeding ? "Ya" : "Tidak"} />
             {input.hasPostpartumBleeding && <ReviewLine label="Persalinan selesai" value={input.deliveryAt || "Belum diisi"} />}
             {PRAYER_TIME_FEATURE_ENABLED && <ReviewLine label="Lokasi" value={input.location?.latitude !== undefined && input.location?.longitude !== undefined ? `${input.location.latitude}, ${input.location.longitude}` : "Manual/perangkat belum diisi"} />}
@@ -88,10 +89,14 @@ export function ReviewSection({
                     : "waktu berhenti belum diisi"}
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  {colors.find((item) => item.value === segment.color)?.label} ·{" "}
-                  {segment.consistency === "KENTAL" ? "Kental" : "Cair"}
-                  {" · "}{segment.odor === "BERAROMA" ? "Beraroma" : "Tidak beraroma"}
-                  {" · "}{segment.origin === "LUKA_PENYAKIT" ? "Luka/penyakit" : "Alami"}
+                  {input.knowsBloodCharacteristics && (
+                    <>
+                      {colors.find((item) => item.value === segment.color)?.label} ·{" "}
+                      {segment.consistency === "TIDAK_DIKETAHUI" ? "Kekentalan tidak diketahui" : segment.consistency === "KENTAL" ? "Kental" : "Cair"} ·{" "}
+                      {segment.odor === "TIDAK_DIKETAHUI" ? "Aroma tidak diketahui" : segment.odor === "BERAROMA" ? "Beraroma" : "Tidak beraroma"} ·{" "}
+                    </>
+                  )}
+                  {segment.origin === "LUKA_PENYAKIT" ? "Luka/penyakit" : "Alami"}
                 </p>
               </div>
             ))}

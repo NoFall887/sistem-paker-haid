@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   HOUR_MS,
   analyzeCase,
+  createEmptySegment,
+  emptyCase,
   formatJakartaInput,
   parseJakartaDateTime,
   type BloodColor,
@@ -31,6 +33,7 @@ const run = (userStatus: UserStatus, segments: CaseInput["segments"], patch: Par
     purityHabitDays: 15,
     purityHabitHours: 360,
     isFirstBleedingCycle: true,
+    knowsBloodCharacteristics: true,
     hasPostpartumBleeding: false,
     segments,
     ...patch,
@@ -68,6 +71,45 @@ describe("batas waktu presisi", () => {
     const exact = run("MUTADAH", [segment("a", base, firstEnd), segment("b", exactStart, at(exactStart, 24))]);
     expect(short.rows.filter((row) => row.start >= parseJakartaDateTime(shortStart)!).map((row) => row.status)).toEqual(["ISTIHADHAH", "FASAD"]);
     expect(exact.haidPeriods).toHaveLength(2);
+  });
+});
+
+describe("kontrol pengetahuan sifat darah", () => {
+  const base = "2026-02-01T06:00";
+  const observed = [
+    segment("a", base, at(base, 48), "HITAM", "KENTAL", "BERAROMA"),
+    segment("b", at(base, 48), at(base, 408), "MERAH", "CAIR", "TIDAK_BERAROMA"),
+  ];
+
+  it("membuat kasus dan segmen baru tanpa pengetahuan sifat", () => {
+    expect(emptyCase().knowsBloodCharacteristics).toBe(false);
+    expect(createEmptySegment()).toMatchObject({
+      color: "TIDAK_DIKETAHUI",
+      consistency: "TIDAK_DIKETAHUI",
+      odor: "TIDAK_DIKETAHUI",
+    });
+  });
+
+  it("mengabaikan sifat tersimpan ketika kontrol dimatikan", () => {
+    const result = run("MUBTADAH", observed, { knowsBloodCharacteristics: false });
+    expect(result.category).toContain("GHOIRU");
+    expect(result.assumptions).toContain("Tamyiz tidak dinilai karena pengguna menyatakan tidak dapat mengamati perbedaan sifat darah.");
+  });
+
+  it("menghasilkan Mumayyizah hanya dari pengamatan lengkap dan sah", () => {
+    expect(run("MUBTADAH", observed).category).toContain("MUMAYYIZAH");
+    const partial = run("MUBTADAH", [
+      observed[0],
+      segment("b", at(base, 48), at(base, 408), "MERAH", "CAIR", "TIDAK_DIKETAHUI"),
+    ]);
+    expect(partial.category).toContain("GHOIRU");
+    expect(partial.assumptions).toContain("Tamyiz tidak dinilai karena ada sifat darah alami yang tidak diketahui.");
+  });
+
+  it("mengembalikan Mu'tadah ke adat bila pengamatan tidak lengkap", () => {
+    const result = run("MUTADAH", observed, { knowsBloodCharacteristics: false });
+    expect(result.category).toContain("GHOIRU");
+    expect(result.rows[0].durationHours).toBe(168);
   });
 });
 
@@ -119,6 +161,18 @@ describe("tujuh golongan mustahadhah", () => {
   it("membedakan Mubtada'ah mumayyizah dan ghairu mumayyizah", () => {
     expect(run("MUBTADAH", [segment("a", base, at(base, 48), "HITAM"), segment("b", at(base, 48), at(base, 408), "MERAH")]).category).toContain("MUMAYYIZAH");
     expect(run("MUBTADAH", long).category).toContain("GHOIRU");
+  });
+  it("menunda mandi Mubtada'ah Mumayyizah sampai hari ke-16 hanya pada daur pertama", () => {
+    const blood = [segment("a", base, at(base, 48), "HITAM"), segment("b", at(base, 48), at(base, 408), "MERAH")];
+    const first = run("MUBTADAH", blood);
+    const later = run("MUBTADAH", blood, { isFirstBleedingCycle: false });
+    expect(first.guidance.bath).toContain("hari ke-16");
+    expect(first.guidance.prayer).toContain("Qadha");
+    expect(first.worshipEvents.find((event) => event.type === "MANDI")?.at).toBe(parseJakartaDateTime(at(base, 360)));
+    expect(first.worshipEvents.some((event) => event.type === "QADHA")).toBe(true);
+    expect(later.guidance.bath).toContain("beralih menjadi darah lemah");
+    expect(later.worshipEvents.find((event) => event.type === "MANDI")?.at).toBe(parseJakartaDateTime(at(base, 48)));
+    expect(later.worshipEvents.some((event) => event.type === "QADHA")).toBe(false);
   });
   it("membedakan panduan daur pertama dan berikutnya", () => {
     expect(run("MUBTADAH", long).guidance.bath).toContain("hari ke-16");
@@ -220,11 +274,13 @@ describe("nifas", () => {
   it("memvalidasi timestamp dan segmen darah postpartum", () => {
     const missingDelivery = analyzeCase({
       userStatus: "MUTADAH",
+      knowsBloodCharacteristics: false,
       hasPostpartumBleeding: true,
       segments: [segment("a", delivery, at(delivery, 24))],
     });
     const noPostpartumSegment = analyzeCase({
       userStatus: "MUTADAH",
+      knowsBloodCharacteristics: false,
       hasPostpartumBleeding: true,
       deliveryAt: delivery,
       deliveryComplete: true,
@@ -251,8 +307,14 @@ describe("nifas", () => {
       segment("a", delivery, at(delivery, 120), "HITAM", "KENTAL", "BERAROMA"),
       segment("b", at(delivery, 120), at(delivery, 1500), "MERAH"),
     ], { hasPostpartumBleeding: true, deliveryAt: delivery });
+    const withoutTamyiz = run("MUTADAH", [
+      segment("a", delivery, at(delivery, 120), "HITAM", "KENTAL", "BERAROMA"),
+      segment("b", at(delivery, 120), at(delivery, 1500), "MERAH"),
+    ], { hasPostpartumBleeding: true, deliveryAt: delivery, knowsBloodCharacteristics: false });
     expect(byHabit.rows.map((row) => [row.status, row.durationHours])).toEqual([["NIFAS", 960], ["ISTIHADHAH", 540]]);
     expect(byTamyiz.rows.map((row) => [row.status, row.durationHours])).toEqual([["NIFAS", 120], ["ISTIHADHAH", 1380]]);
+    expect(withoutTamyiz.rows[0].durationHours).toBeCloseTo(1 / 60);
+    expect(withoutTamyiz.assumptions.some((item) => item.includes("Tamyiz nifas tidak dinilai"))).toBe(true);
   });
   it("membedakan darah tertunda sebelum dan tepat 15 hari", () => {
     const before = at(delivery, 359, 59);
@@ -279,7 +341,7 @@ describe("asal darah dan validasi", () => {
     expect(result.rows[0].status).toBe("FASAD");
   });
   it("menolak rentang tumpang tindih dan baris parsial", () => {
-    expect(analyzeCase({ userStatus: "MUBTADAH", hasPostpartumBleeding: false, segments: [segment("a", "2026-01-01T00:00", "2026-01-03T00:00"), segment("b", "2026-01-02T00:00", "2026-01-04T00:00")] }).issues[0].message).toContain("tumpang-tindih");
-    expect(analyzeCase({ userStatus: "MUBTADAH", hasPostpartumBleeding: false, segments: [segment("a", "2026-01-01T00:00", "")] }).issues[0].message).toContain("lengkap");
+    expect(analyzeCase({ userStatus: "MUBTADAH", knowsBloodCharacteristics: false, hasPostpartumBleeding: false, segments: [segment("a", "2026-01-01T00:00", "2026-01-03T00:00"), segment("b", "2026-01-02T00:00", "2026-01-04T00:00")] }).issues[0].message).toContain("tumpang-tindih");
+    expect(analyzeCase({ userStatus: "MUBTADAH", knowsBloodCharacteristics: false, hasPostpartumBleeding: false, segments: [segment("a", "2026-01-01T00:00", "")] }).issues[0].message).toContain("lengkap");
   });
 });

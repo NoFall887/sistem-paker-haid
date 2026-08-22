@@ -1,7 +1,7 @@
 import { TIMEZONE, type CaseInput } from "@/lib/fiqh-engine";
 
 const STORAGE_KEY = "panduan-fikih-haid:history";
-export const HISTORY_SCHEMA_VERSION = 3;
+export const HISTORY_SCHEMA_VERSION = 4;
 
 export interface PersistedHistory {
   schemaVersion: number;
@@ -31,7 +31,7 @@ export function migrateHistory(value: unknown): CaseInput | null {
   if (!value || typeof value !== "object") return null;
   const parsed = value as Partial<PersistedHistory>;
   if (parsed.timezone !== TIMEZONE || !parsed.caseInput || !Array.isArray(parsed.caseInput.segments)) return null;
-  if (![1, 2, HISTORY_SCHEMA_VERSION].includes(parsed.schemaVersion ?? 0)) return null;
+  if (![1, 2, 3, HISTORY_SCHEMA_VERSION].includes(parsed.schemaVersion ?? 0)) return null;
   const source = parsed.caseInput;
   return {
     ...source,
@@ -43,6 +43,7 @@ export function migrateHistory(value: unknown): CaseInput | null {
     possibleHabitWindowEnd: source.possibleHabitWindowEnd ?? "",
     isFirstBleedingCycle: source.isFirstBleedingCycle ?? true,
     habitHistory: source.habitHistory ?? [],
+    knowsBloodCharacteristics: parsed.schemaVersion === HISTORY_SCHEMA_VERSION ? source.knowsBloodCharacteristics ?? false : true,
     hasPostpartumBleeding: source.hasPostpartumBleeding ?? Boolean(source.deliveryAt),
     isPregnant: source.isPregnant ?? false,
     deliveryAt: source.deliveryAt ?? "",
@@ -82,6 +83,7 @@ export function historyAsText(caseInput: CaseInput) {
     `Adat suci: ${caseInput.purityHabitHours ?? (caseInput.purityHabitDays ?? 0) * 24} jam`,
     `Timestamp mulai yang diingat: ${caseInput.rememberedHabitStart || caseInput.habitualStartTime || "-"}`,
     `Rentang kemungkinan: ${caseInput.possibleHabitWindowStart || "-"} — ${caseInput.possibleHabitWindowEnd || "-"}`,
+    `Dapat mengamati sifat darah: ${caseInput.knowsBloodCharacteristics ? "ya" : "tidak"}`,
     `Darah setelah persalinan: ${caseInput.hasPostpartumBleeding ? "ya" : "tidak"}`,
     ...(caseInput.hasPostpartumBleeding ? [
       `Persalinan selesai: ${caseInput.deliveryAt || "-"}`,
@@ -96,7 +98,7 @@ export function historyAsText(caseInput: CaseInput) {
   segments.forEach((segment, index) => {
     lines.push(
       `${index + 1}. ${segment.start || "(mulai belum diisi)"} — ${segment.end || "(berhenti belum diisi)"}`,
-      `   Warna: ${segment.color}; Kekentalan: ${segment.consistency}; Aroma: ${segment.odor ?? "TIDAK_BERAROMA"}; Asal: ${segment.origin ?? "ALAMI"}`,
+      ...(caseInput.knowsBloodCharacteristics ? [`   Warna: ${segment.color}; Kekentalan: ${segment.consistency}; Aroma: ${segment.odor ?? "TIDAK_BERAROMA"}; Asal: ${segment.origin ?? "ALAMI"}`] : [`   Asal: ${segment.origin ?? "ALAMI"}`]),
     );
   });
   return `${lines.join("\r\n")}\r\n`;

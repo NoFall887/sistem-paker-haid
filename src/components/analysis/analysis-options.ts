@@ -43,6 +43,7 @@ export const profiles: {
 ];
 
 export const colors: { value: BloodColor; label: string }[] = [
+  { value: "TIDAK_DIKETAHUI", label: "Tidak diketahui" },
   { value: "HITAM", label: "Hitam (Aswad)" },
   { value: "MERAH", label: "Merah (Ahmar)" },
   { value: "PIRANG", label: "Pirang (Asyqar)" },
@@ -54,11 +55,13 @@ export const consistencies: {
   value: BloodConsistency;
   label: string;
 }[] = [
+  { value: "TIDAK_DIKETAHUI", label: "Tidak diketahui" },
   { value: "KENTAL", label: "Kental" },
   { value: "CAIR", label: "Cair" },
 ];
 
 export const odors: { value: BloodOdor; label: string }[] = [
+  { value: "TIDAK_DIKETAHUI", label: "Tidak diketahui" },
   { value: "BERAROMA", label: "Beraroma kuat" },
   { value: "TIDAK_BERAROMA", label: "Tidak beraroma kuat" },
 ];
